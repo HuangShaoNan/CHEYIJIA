@@ -94,75 +94,123 @@ export const constantRoutes = [
 /**
  * asyncRoutes
  * the routes that need to be dynamically loaded based on user roles
+ * 车易加后台路由模块['CompanyManagement'] 权限['admin']
+ *
  */
 export const asyncRoutes = [
   {
-    path: '/nested',
+    // 车易加路由模块 - 公司管理
+    path: '/CompanyManagement',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
+    name: 'CompanyManagement',
+    redirect: '/CompanyManagement/list',
     meta: {
-      title: 'Nested',
-      icon: 'nested'
+      title: '公司管理',
+      icon: 'example',
+      roles: ['admin']
     },
-    children: [
-      {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: 'Menu1' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: 'Menu1-1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: 'Menu1-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: 'Menu1-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: 'Menu1-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: 'Menu1-3' }
-          }
-        ]
-      },
-      {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: 'menu2' }
+    children: [{
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/CHEYIJIA/CompanyManagement/list'),
+      meta: {
+        title: '公司列表',
+        icon: 'example'
       }
-    ]
-  },
+    },
+    {
+      path: 'add',
+      name: 'Add',
+      component: () => import('@/views/CHEYIJIA/CompanyManagement/add'),
+      meta: {
+        title: '新增公司',
+        icon: 'example'
+      }
+    },
+    {
+      path: 'edit',
+      name: 'Edit',
+      component: () => import('@/views/CHEYIJIA/CompanyManagement/edit')
+    }]
 
+  },
   {
-    path: 'external-link',
+    // 车易加路由模块 - 员工管理
+    path: '/EmployeeManagement',
     component: Layout,
-    children: [
-      {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: 'External Link', icon: 'link' }
+    name: 'EmployeeManagement',
+    redirect: '/EmployeeManagement/list',
+    meta: {
+      title: '员工管理',
+      icon: 'example',
+      roles: ['admin']
+    },
+    children: [{
+      path: 'list',
+      name: 'List',
+      component: () => import('@/views/CHEYIJIA/EmployeeManagement/list'),
+      meta: {
+        title: '用户列表'
       }
-    ]
+    },
+    {
+      path: 'add',
+      name: 'Add',
+      component: () => import('@/views/CHEYIJIA/EmployeeManagement/add'),
+      meta: {
+        title: '新增用户'
+      }
+    },
+    {
+      path: 'edit',
+      name: 'Edit',
+      component: () => import('@/views/CHEYIJIA/EmployeeManagement/edit')
+    }]
+  },
+  {
+    // 车易加路由模块 - 公司充值
+    path: '/CompanyRecharge',
+    component: Layout,
+    children: [{
+      path: 'recharge',
+      name: 'recharge',
+      component: () => import('@/views/CHEYIJIA/CompanyRecharge/recharge'),
+      meta: {
+        title: '公司充值',
+        icon: 'example',
+        roles: ['admin']
+      }
+    }]
+  },
+  {
+    // 车易加路由模块 - 开具发票
+    path: '/openInvoice',
+    component: Layout,
+    children: [{
+      path: 'open',
+      name: 'open',
+      component: () => import('@/views/CHEYIJIA/openInvoice/open'),
+      meta: {
+        title: '开具发票',
+        icon: 'example',
+        roles: ['admin']
+      }
+    }]
+  },
+  {
+    // 车易加路由模块 -结算管理
+    path: '/settlement',
+    component: Layout,
+    children: [{
+      path: 'settlementMg',
+      name: 'settlementMg',
+      component: () => import('@/views/CHEYIJIA/settlement/settlementMg'),
+      meta: {
+        title: '结算管理',
+        icon: 'example',
+        roles: ['admin']
+      }
+    }]
   },
 
   // 404 page must be placed at the end !!!
