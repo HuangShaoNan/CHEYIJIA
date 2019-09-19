@@ -1,11 +1,8 @@
-<!-- 公司管理 公司列表 -->
+<!-- 司机管理 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">新增新公司</el-button>
-		<el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-			搜索
-		</el-button>
+    <el-button type="primary" @click="handleAdd">新增司机</el-button>
+		<upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -17,7 +14,7 @@
     >
       <el-table-column align="center" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index + 1 }}
+          {{ scope.$index }}
         </template>
       </el-table-column>
       <el-table-column label="名称" align="center">
@@ -52,53 +49,40 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getCompanyMg" />
   </div>
 </template>
 
 <script>
 import { getList } from '@/api/table'
-import Pagination from '@/components/Pagination' // secondary package based on el-pagination
+import UploadExcelComponent from '@/components/UploadExcel/index.vue'
 
 export default {
   data() {
     return {
-			list: null,
-			total: 0,
-			listLoading: true,
-			listQuery: { // 查询列表参数
-        page: 1,
-				limit: 20,
-				name: '' // 公司名称
-      },
+      list: null,
+      listLoading: true
     }
-  },
+	},
+	components: { UploadExcelComponent },
   created() {
     this.getCompanyMg()
-	},
-	components: { Pagination },
+  },
   methods: {
     // 获取公司列表
     async getCompanyMg() {
       this.listLoading = true
-      const res = await getList(this.listQuery)
-			this.list = res.data.items || []
-			this.total = res.data.total
+      const res = await getList()
+      this.list = res.data.items
       this.listLoading = false
     },
     // 新增新公司
     handleAdd() {
-      this.$router.push({ path: '/CompanyManagement/add', params: { Id: 123 }})
+      this.$router.push({ path: '/driverManagement/add', params: { Id: 123 }})
     },
     // 修改
     handleEdit() {
-      this.$router.push({ path: '/CompanyManagement/edit' })
-		},
-		// 搜索公司
-		handleFilter() {
-			this.listQuery.page = 1
-			this.getCompanyMg()
-    },
+      this.$router.push({ path: '/driverManagement/edit' })
+    }
   }
 }
 </script>

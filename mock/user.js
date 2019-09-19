@@ -29,8 +29,9 @@ export default [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
+      // const { username } = config.body
+			// const token = tokens['username']
+			const token = tokens['admin']
 
       // mock error
       if (!token) {
@@ -52,8 +53,9 @@ export default [
     url: '/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
+      // const { token } = config.query
+      // const info = users[token]
+      const info = users['admin-token']
 
       // mock error
       if (!info) {
