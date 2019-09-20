@@ -1,79 +1,138 @@
+<!-- 公司管理 新增公司 -->
 <template>
   <div class="app-container">
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-    >
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Title">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="Author" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="Pageviews" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="Status" width="110" align="center">
-        <template slot-scope="scope">
-          <el-tag :type="scope.row.status | statusFilter">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="Display_time" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-form ref="editForm" :model="editForm" :rules="addRules" label-width="120px">
+      <el-form-item label="名称" ref="name" prop="name">
+        <el-input v-model="editForm.name" />
+      </el-form-item>
+			<el-form-item label="税号">
+        <el-input v-model="editForm.tax_num" />
+      </el-form-item>
+			<el-form-item label="邮箱" prop="email">
+				<el-input v-model="editForm.email" />
+      </el-form-item>
+      <el-form-item label="是否冻结">
+        <el-switch
+					v-model="editForm.state"
+					:active-value= "1"
+					:inactive-value= "0"/>
+      </el-form-item>
+			<el-form-item label="上传营业执照">
+        <el-upload
+					class="upload-demo"
+					action="api/uploads?type=img"
+					:before-remove="beforeRemove"
+					:on-success="handleSuccess"
+					list-type="picture"
+					:headers="headers"
+					multiple
+					:limit="3"
+					:on-exceed="handleExceed">
+					<el-button size="small" type="primary">点击上传</el-button>
+					<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+				</el-upload>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">提交修改</el-button>
+        <el-button @click="onCancel">取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
-
+import { detail, update } from '@/api/CompanyManagement'
+import { getToken } from '@/utils/auth'
 export default {
-  filters: {
-    statusFilter(status) {
-      const statusMap = {
-        published: 'success',
-        draft: 'gray',
-        deleted: 'danger'
-      }
-      return statusMap[status]
-    }
-  },
   data() {
+		//
+    const validateName = (rule, value, callback) => {
+      if ((value == '')) {
+        callback(new Error('请输入名称'))
+      } else {
+        callback()
+      }
+		}
+		 const validateEmail = (rule, value, callback) => {
+			 let _reg = /^([a-zA-Z]|[0-9])(\w|\-)+@[a-zA-Z0-9]+\.([a-zA-Z]{2,4})$/
+      if (!_reg.test(value)) {
+        callback(new Error('请输入邮箱地址'))
+      } else {
+        callback()
+      }
+		}
     return {
-      list: null,
-      listLoading: true
+      editForm: {
+        name: '',
+				tax_num: '', // 税号
+				email: '',
+				license_url: '',
+				state: false, // 状态
+			},
+			headers: {
+				'X-token': getToken()
+			},
+			addRules: { // 信息规则验证
+        name: [{ required: true, trigger: 'blur', validator: validateName }],
+        email: [{ required: true, trigger: 'blur', validator: validateEmail }],
+			},
+			id: ''
     }
-  },
-  created() {
-    this.fetchData()
-  },
+	},
+	created() {
+		this.id = this.$route.query.id
+		this.getInfo()
+	},
   methods: {
-    fetchData() {
-      this.listLoading = true
-      getList().then(response => {
-        this.list = response.data.items
-        this.listLoading = false
+		handleExceed(files, fileList) {
+			this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+		},
+		beforeRemove(file, fileList) {
+			return this.$confirm(`确定移除 ${ file.name }？`);
+		},
+		// 上传成功
+		handleSuccess(response, file, fileList) {
+			let { url } = response
+			this.editForm.license_url = url
+		},
+		// 获取详情信息
+		async getInfo() {
+			let { id } = this
+			let info = await detail({id})
+			let {name, license_url, tax_num, email, state} = info.data
+			this.editForm = {
+				name, license_url, tax_num, email, state, id
+			}
+		},
+		// 提交
+    onSubmit() {
+			 this.$refs.editForm.validate(valid => {
+        if (valid) {
+					update({company: this.editForm}).then(res => {
+					this.$message({
+						message: '修改成功',
+						type: 'success'
+					})
+					this.$router.push({ path: '/CompanyManagement/list' })
+			})
+        } else {
+          console.log('error submit!!')
+          return false
+        }
       })
+		},
+		// 取消
+    onCancel() {
+			this.$router.go(-1)
     }
   }
 }
 </script>
+
+<style scoped>
+.line{
+  text-align: center;
+}
+</style>
+
+

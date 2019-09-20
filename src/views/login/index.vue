@@ -7,15 +7,15 @@
         <h3 class="title">登录</h3>
       </div>
 
-      <el-form-item prop="username">
+      <el-form-item prop="mobile">
         <span class="svg-container">
           <svg-icon icon-class="user" />
         </span>
         <el-input
-          ref="username"
-          v-model="loginForm.username"
+          ref="mobile"
+          v-model="loginForm.mobile"
           placeholder="用户名"
-          name="username"
+          name="mobile"
           type="text"
           tabindex="1"
           auto-complete="on"
@@ -72,11 +72,11 @@ export default {
     }
     return {
       loginForm: { //提交信息
-        username: '',
-        password: ''
+        mobile: '15010233162',
+        password: '123456'
       },
       loginRules: { // 登录信息规则验证
-        username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+        mobile: [{ required: true, trigger: 'blur', validator: validateUsername }],
         password: [{ required: true, trigger: 'blur', validator: validatePassword }]
       },
       loading: false,

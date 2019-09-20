@@ -15,35 +15,46 @@
       highlight-current-row
       style="margin-top:30px;"
     >
-      <el-table-column align="center" label="ID" width="95">
+      <el-table-column align="center" prop="id" label="ID" width="95">
         <template slot-scope="scope">
-          {{ scope.$index + 1 }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="名称" align="center">
+      <el-table-column label="名称" prop="name" align="center">
         <template slot-scope="scope">
-          {{ scope.row.title }}
+          {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="可用额度" width="110" align="center">
+			 <el-table-column label="企业税号" prop="tax_num" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
+          {{ scope.row.tax_num }}
         </template>
       </el-table-column>
-      <el-table-column label="已用额度" width="110" align="center">
+      <el-table-column label="可用额度" width="110" prop="available_amount" align="center">
         <template slot-scope="scope">
-          {{ scope.row.pageviews }}
+          <span>{{ scope.row.available_amount }}</span>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="创建用户" width="110" align="center">
+      <el-table-column label="已用额度" width="110" align="center" prop="used_amount">
         <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
+          {{ scope.row.used_amount }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
+			<el-table-column class-name="status-col" label="营业执照" width="110" align="center" prop="license_url">
+        <template slot-scope="scope">
+					<el-link v-if="scope.row.license_url" target="_blank" :href="scope.row.license_url">查看<i class="el-icon-view el-icon--right"></i> </el-link>
+					<el-link v-else >未上传</el-link>
+        </template>
+      </el-table-column>
+			<el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
+			<template slot-scope="scope">
+				<span>{{ scope.row.state == 0 ? '正常' : '冻结' }}</span>
+			</template>
+      </el-table-column>
+      <el-table-column align="center" prop="create_date" label="创建时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
+          <span>{{ scope.row.create_date | parseTime }}</span>
         </template>
       </el-table-column>
       <el-table-column align="center" label="操作" width="100">
@@ -52,12 +63,13 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.limit" @pagination="getCompanyMg" />
+		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getCompanyMg" />
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { getList } from '@/api/CompanyManagement'
+import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -67,14 +79,21 @@ export default {
 			total: 0,
 			listLoading: true,
 			listQuery: { // 查询列表参数
-        page: 1,
-				limit: 20,
+        page_index: 1,
+				page_size: 10,
 				name: '' // 公司名称
-      },
+			}
     }
   },
   created() {
     this.getCompanyMg()
+	},
+	filters: {
+		// 格式化时间
+		parseTime (value) {
+			if (!value) return ''
+			return parseTime(value)
+		}
 	},
 	components: { Pagination },
   methods: {
@@ -82,21 +101,21 @@ export default {
     async getCompanyMg() {
       this.listLoading = true
       const res = await getList(this.listQuery)
-			this.list = res.data.items || []
+			this.list = res.data.list || []
 			this.total = res.data.total
       this.listLoading = false
     },
     // 新增新公司
     handleAdd() {
-      this.$router.push({ path: '/CompanyManagement/add', params: { Id: 123 }})
+      this.$router.push({ path: '/CompanyManagement/add'})
     },
     // 修改
-    handleEdit() {
-      this.$router.push({ path: '/CompanyManagement/edit' })
+    handleEdit(scope) {
+      this.$router.push({ path: '/CompanyManagement/edit', query: {id: scope.row.id}  })
 		},
 		// 搜索公司
 		handleFilter() {
-			this.listQuery.page = 1
+			this.listQuery.page_index = 1
 			this.getCompanyMg()
     },
   }
