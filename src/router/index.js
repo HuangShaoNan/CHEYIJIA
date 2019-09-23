@@ -76,7 +76,7 @@ export const asyncRoutes = [
     },
     children: [{
       path: 'list',
-      name: 'List',
+      name: 'cmList',
       component: () => import('@/views/CHEYIJIA/CompanyManagement/list'),
       meta: {
         title: '公司列表',
@@ -86,7 +86,7 @@ export const asyncRoutes = [
     },
     {
       path: 'add',
-      name: 'Add',
+      name: 'cmAdd',
       component: () => import('@/views/CHEYIJIA/CompanyManagement/add'),
       meta: {
         title: '新增公司',
@@ -96,12 +96,13 @@ export const asyncRoutes = [
     },
     {
       path: 'edit',
-			name: 'Edit',
+			name: 'cmEdit',
 			hidden: true,
 			meta: {
+        title: '修改资料',
 				roles: ['admin']
 			},
-      component: () => import('@/views/CHEYIJIA/CompanyManagement/edit')
+      component: () => import('@/views/CHEYIJIA/CompanyManagement/add')
     }]
 
   },
@@ -118,7 +119,7 @@ export const asyncRoutes = [
     },
     children: [{
       path: 'list',
-      name: 'List',
+      name: 'emList',
       component: () => import('@/views/CHEYIJIA/EmployeeManagement/list'),
       meta: {
 				title: '用户列表',
@@ -127,7 +128,7 @@ export const asyncRoutes = [
     },
     {
       path: 'add',
-      name: 'Add',
+      name: 'emAdd',
       component: () => import('@/views/CHEYIJIA/EmployeeManagement/add'),
       meta: {
 				title: '新增用户',
@@ -136,12 +137,13 @@ export const asyncRoutes = [
     },
     {
       path: 'edit',
-			name: 'Edit',
+			name: 'emEdit',
 			hidden: true,
 			meta: {
+				title: '编辑用户',
 				roles: ['admin']
 			},
-      component: () => import('@/views/CHEYIJIA/EmployeeManagement/edit')
+      component: () => import('@/views/CHEYIJIA/EmployeeManagement/add')
     }]
   },
   {
@@ -180,28 +182,28 @@ export const asyncRoutes = [
       }
     }]
   },
-  {
-    // 车易加路由模块 -结算管理
-    path: '/settlement',
-		component: Layout,
-		meta: {
-			roles: ['admin']
-		},
-    children: [{
-      path: 'settlementMg',
-      name: 'settlementMg',
-      component: () => import('@/views/CHEYIJIA/settlement/settlementMg'),
-      meta: {
-        title: '结算管理',
-        icon: 'example',
-        roles: ['admin']
-      }
-    }]
-  },
+  // {
+  //   // 车易加路由模块 -结算管理
+  //   path: '/settlement',
+	// 	component: Layout,
+	// 	meta: {
+	// 		roles: ['admin']
+	// 	},
+  //   children: [{
+  //     path: 'settlementMg',
+  //     name: 'settlementMg',
+  //     component: () => import('@/views/CHEYIJIA/settlement/settlementMg'),
+  //     meta: {
+  //       title: '结算管理',
+  //       icon: 'example',
+  //       roles: ['admin']
+  //     }
+  //   }]
+  // },
 
   {
     // 物流公司路由模块 - 公司基本资料
-    path: '/basicInfo',
+    path: '/CompanyManagement',
     component: Layout,
     meta: {
       roles: ['company']
@@ -209,7 +211,7 @@ export const asyncRoutes = [
     children: [{
       path: 'info',
       name: 'info',
-      component: () => import('@/views/LOGISTICS/basicInfo/info'),
+      component: () => import('@/views/CHEYIJIA/CompanyManagement/add'),
       meta: {
         title: '基本资料',
         icon: 'example'
@@ -225,7 +227,7 @@ export const asyncRoutes = [
 	  },
 	  children: [{
 	    path: 'list',
-	    name: 'list',
+	    name: 'rechargeList',
 	    component: () => import('@/views/LOGISTICS/recharge/list'),
 	    meta: {
 	      title: '充值记录',
@@ -235,7 +237,7 @@ export const asyncRoutes = [
 		},
 		{
 			path: 'add',
-			name: 'add',
+			name: 'rechargeAdd',
 			hidden: true,
 			component: () => import('@/views/LOGISTICS/recharge/add'),
 			meta: {
@@ -253,7 +255,7 @@ export const asyncRoutes = [
 			icon: 'example',
 	  },
 	  children: [{
-	      path: 'list',
+	      path: 'dmlist',
 	      name: 'list',
 	      component: () => import('@/views/LOGISTICS/driverManagement/list'),
 	      meta: {
@@ -264,7 +266,7 @@ export const asyncRoutes = [
 	    },
 	    {
 	      path: 'add',
-	      name: 'add',
+	      name: 'dmadd',
 	      component: () => import('@/views/LOGISTICS/driverManagement/add'),
 	      meta: {
 					roles: ['company'],
@@ -274,7 +276,7 @@ export const asyncRoutes = [
 			},
 			{
 				path: 'edit',
-				name: 'Edit',
+				name: 'dmEdit',
 				hidden: true,
 				component: () => import('@/views/LOGISTICS/driverManagement/edit'),
 				meta: {
@@ -310,7 +312,7 @@ export const asyncRoutes = [
 		},
 		children: [{
 				path: 'list',
-				name: 'list',
+				name: 'erList',
 				component: () => import('@/views/LOGISTICS/expensesRecord/list'),
 				meta: {
 					title: '司机消费记录',

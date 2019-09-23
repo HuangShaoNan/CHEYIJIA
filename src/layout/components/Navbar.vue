@@ -46,10 +46,10 @@ export default {
 		// 退出登录
     async logout() {
       await this.$store.dispatch('user/logout')
-      this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+      this.$router.push(`/login?redirect=/`)
 		},
 		async editPsw() {
-			
+
 		}
   }
 }

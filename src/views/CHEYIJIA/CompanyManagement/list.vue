@@ -3,7 +3,7 @@
   <div class="app-container">
     <el-button type="primary" @click="handleAdd">新增新公司</el-button>
 		<el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+		<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
 			搜索
 		</el-button>
     <el-table
@@ -48,7 +48,8 @@
       </el-table-column>
 			<el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
 			<template slot-scope="scope">
-				<span>{{ scope.row.state == 0 ? '正常' : '冻结' }}</span>
+				<el-tag type="" v-if="scope.row.state == 0">正常</el-tag>
+				<el-tag type="danger" v-else>冻结</el-tag>
 			</template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="创建时间" width="200">
@@ -111,7 +112,7 @@ export default {
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/CompanyManagement/edit', query: {id: scope.row.id}  })
+      this.$router.push({ path: '/CompanyManagement/add', query: {id: scope.row.id}  })
 		},
 		// 搜索公司
 		handleFilter() {
