@@ -121,17 +121,14 @@ export default {
 					verifyInvoice({recharge_id: id,express_name, express_num }).then(() => {
 						this.$message({
 							type: 'success',
-							message: '充值成功!'
+							message: '开票成功!'
 						});
 						// 更新列表
 						this.getInvoiceList()
 					})
 
         }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });
+
         });
 		},
 		// 搜索公司
