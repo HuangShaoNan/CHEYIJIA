@@ -284,27 +284,19 @@ export const asyncRoutes = [
 				  title: '修改司机',
 					roles: ['company']
 				}
+			},
+			{
+			  path: 'rechargeCard',
+			  name: 'rechargeCard',
+			  component: () => import('@/views/LOGISTICS/driverManagement/rechargeCard'),
+			  meta: {
+					icon: 'example',
+			    title: '充值卡记录',
+			    roles: ['company']
+			  }
 			}
 	  ]
 	},
-	// {
-	//   // 物流公司路由模块 - 司机加注卡管理
-	//   path: '/expensesRecord',
-	//   component: Layout,
-	//   meta: {
-	//     roles: ['company']
-	//   },
-	//   children: [{
-	//     path: 'list',
-	//     name: 'list',
-	//     component: () => import('@/views/LOGISTICS/expensesRecord/list'),
-	//     meta: {
-	//       title: '司机消费记录',
-	//       icon: 'example',
-	//       roles: ['company']
-	//     }
-	//   }]
-	// },
 	{
 		// 物流公司路由模块 - 司机消费记录
 		path: '/expensesRecord',
