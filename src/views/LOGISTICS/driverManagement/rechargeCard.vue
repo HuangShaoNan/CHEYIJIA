@@ -60,31 +60,7 @@ export default {
         page_index: 1,
 				page_size: 10,
 				mobile: ''
-			},
-			optionsDriverlist: [
-				{
-					id: 0,
-					name: '内部司机'
-				},
-				{
-					id: 1,
-					name: '外部司机'
-				}
-			],
-			cardTypeList: [
-				{
-					id: 0,
-					name: '私有卡'
-				},
-				{
-					id: 1,
-					name: '共享卡'
-				},
-				{
-					id: 2,
-					name: '未开卡'
-				}
-			]
+			}
     }
   },
   created() {
@@ -99,21 +75,9 @@ export default {
 	},
 	components: { Pagination },
 	computed: {
-		// 司机类型
-		DriverType() {
-			return function (val) {
-				return this.optionsDriverlist.find(x => x.id == val).name
-       }
-		},
-		// 开卡类型
-		cardType(val) {
-			return function (val) {
-				return this.cardTypeList.find(x => x.id == val).name
-      }
-		}
 	},
   methods: {
-    // 获取公司列表
+    // 获取充值记录表
     async rechargeCard() {
       this.listLoading = true
       const res = await rechargeCard(this.listQuery)
@@ -121,14 +85,6 @@ export default {
 			this.total = res.data.total
       this.listLoading = false
     },
-    // 新增新公司
-    handleAdd() {
-      this.$router.push({ path: '/driverManagement/add'})
-    },
-    // 修改
-    handleEdit(scope) {
-      this.$router.push({ path: '/driverManagement/add', query: {id: scope.row.id}  })
-		},
 		// 搜索公司
 		handleFilter() {
 			this.listQuery.page_index = 1
