@@ -297,25 +297,25 @@ export const asyncRoutes = [
 			}
 	  ]
 	},
-	{
-		// 物流公司路由模块 - 司机消费记录
-		path: '/expensesRecord',
-		component: Layout,
-		meta: {
-			roles: ['company']
-		},
-		children: [{
-				path: 'list',
-				name: 'erList',
-				component: () => import('@/views/LOGISTICS/expensesRecord/list'),
-				meta: {
-					title: '司机消费记录',
-					icon: 'example',
-					roles: ['company']
-				}
-			}
-		]
-	},
+	// {
+	// 	// 物流公司路由模块 - 司机消费记录
+	// 	path: '/expensesRecord',
+	// 	component: Layout,
+	// 	meta: {
+	// 		roles: ['company']
+	// 	},
+	// 	children: [{
+	// 			path: 'list',
+	// 			name: 'erList',
+	// 			component: () => import('@/views/LOGISTICS/expensesRecord/list'),
+	// 			meta: {
+	// 				title: '司机消费记录',
+	// 				icon: 'example',
+	// 				roles: ['company']
+	// 			}
+	// 		}
+	// 	]
+	// },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
