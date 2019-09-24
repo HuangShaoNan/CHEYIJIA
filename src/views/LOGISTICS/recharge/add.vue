@@ -1,87 +1,142 @@
+<!-- 公司管理 新增公司 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">充值</el-button>
-    <el-table
-      v-loading="listLoading"
-      :data="list"
-      element-loading-text="Loading"
-      border
-      fit
-      highlight-current-row
-      style="margin-top:30px;"
-    >
-      <el-table-column align="center" label="ID" width="95">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
-      </el-table-column>
-      <el-table-column label="名称" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
-      </el-table-column>
-      <el-table-column label="可用额度" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.author }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="已用额度" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pageviews }}
-        </template>
-      </el-table-column>
-      <el-table-column class-name="status-col" label="创建用户" width="110" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.status }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="created_at" label="创建时间" width="200">
-        <template slot-scope="scope">
-          <i class="el-icon-time" />
-          <span>{{ scope.row.display_time }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
+      <el-form-item label="转账账户名" ref="card_name" prop="card_name">
+        <el-input v-model="addForm.card_name" />
+      </el-form-item>
+			<el-form-item label="转账卡号" ref="card_num" prop="card_num">
+        <el-input v-model="addForm.card_num" />
+      </el-form-item>
+			<el-form-item label="转账金额" ref="amount" prop="amount">
+				<el-input v-model="addForm.amount" />
+      </el-form-item>
+			<el-form-item label="上传转账截图" ref="recharge_img" prop="recharge_img">
+        <el-upload
+					class="upload-demo"
+					action="api/uploads?type=img"
+					:before-remove="beforeRemove"
+					:on-success="handleSuccess"
+					list-type="picture"
+					:headers="headers"
+					multiple
+					:limit="1"
+					:file-list="fileList"
+					:on-exceed="handleExceed">
+					<el-button size="small" type="primary">点击上传</el-button>
+					<div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+				</el-upload>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit">提交</el-button>
+        <el-button @click="onCancel">取消</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 </template>
 
 <script>
-import { getList } from '@/api/table'
+import { rechargeAdd } from '@/api/recharge'
+import { getToken } from '@/utils/auth'
+import { mapGetters } from 'vuex'
 
 export default {
   data() {
+		//
+    const validateCardName = (rule, value, callback) => {
+      if ((value == '')) {
+        callback(new Error('请输入转账账户名'))
+      } else {
+        callback()
+      }
+		}
+		const validateCardNum = (rule, value, callback) => {
+			if ((value == '')) {
+				callback(new Error('请输入转账卡号'))
+			} else {
+				callback()
+      }
+		}
+		const validateAmount = (rule, value, callback) => {
+			if ((value == '')) {
+				callback(new Error('请输入充值金额'))
+			} else {
+				callback()
+			}
+		}
+		const validateRechargeImg = (rule, value, callback) => {
+			if ((value == '')) {
+				callback(new Error('请上传转账截图'))
+			} else {
+				callback()
+			}
+		}
     return {
-      list: null,
-      listLoading: true
+      addForm: {
+        card_name: '',
+				card_num: '',
+				amount: '',
+				recharge_img: '',
+			},
+			headers: {
+				'X-token': getToken()
+			},
+			addRules: { // 信息规则验证
+        card_name: [{ required: true, trigger: 'blur', validator: validateCardName }],
+        card_num: [{ required: true, trigger: 'blur', validator: validateCardNum }],
+        amount: [{ required: true, trigger: 'blur', validator: validateAmount }],
+        recharge_img: [{ required: true, trigger: 'blur', validator: validateRechargeImg }],
+			},
+			id: '',
+			fileList: []
     }
-  },
-  created() {
-    this.getCompanyMg()
+	},
+	created() {
+
+	},
+	computed: {
   },
   methods: {
-    // 获取公司列表
-    async getCompanyMg() {
-      this.listLoading = true
-      const res = await getList()
-      this.list = res.data.items
-      this.listLoading = false
-    },
-    // 新增新公司
-    handleAdd() {
-      this.$router.push({ path: '/CompanyManagement/add', params: { Id: 123 }})
-    },
-    // 修改
-    handleEdit() {
-      this.$router.push({ path: '/CompanyManagement/edit' })
+		handleExceed(files, fileList) {
+			this.$message.warning(`当前限制选择 1 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`);
+		},
+		beforeRemove(file, fileList) {
+			return this.$confirm(`确定移除 ${ file.name }？`);
+		},
+		// 上传成功
+		handleSuccess(response, file, fileList) {
+			let { url } = response
+			this.addForm.recharge_img = url
+		},
+		// 提交
+    onSubmit() {
+			 this.$refs.addForm.validate(valid => {
+        if (valid) {
+					rechargeAdd({recharge: this.addForm}).then(() => {
+						this.$message({
+							message: '提交成功',
+							type: 'success'
+						})
+						this.$router.push({ path: '/recharge/list' })
+					})
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
+		},
+		// 取消
+    onCancel() {
+      this.$router.go(-1)
     }
   }
 }
 </script>
-<style lang="scss" scoped>
 
+<style scoped>
+.line{
+  text-align: center;
+}
 </style>
+
+

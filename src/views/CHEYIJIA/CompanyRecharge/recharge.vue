@@ -1,5 +1,4 @@
 <!-- 公司员工管理 模块 -->
-<!-- 公司管理 公司列表 -->
 <template>
   <div class="app-container">
 		<el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
@@ -71,9 +70,9 @@
 					<el-link v-if="scope.row.recharge_img" target="_blank" :href="scope.row.recharge_img">查看<i class="el-icon-view el-icon--right"></i> </el-link>
         </template>
       </el-table-column>
-      <el-table-column label="发票状态" prop="write_invoive" align="center">
+      <el-table-column label="发票状态" prop="write_invoice" align="center">
         <template slot-scope="scope">
-					<el-tag type="">{{scope.row.write_invoive == 0 ? '未开票' : scope.row.write_invoive == 1 ? '申请开票' : '已开发票'}}</el-tag>
+					<el-tag type="">{{scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票'}}</el-tag>
         </template>
       </el-table-column>
 			<el-table-column label="企业税号" prop="tax_num" align="center">

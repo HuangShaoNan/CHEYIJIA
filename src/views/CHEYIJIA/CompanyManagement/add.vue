@@ -137,7 +137,7 @@ export default {
 			let Fn = (this.id || this.roles == 'company') ? update : add
 			Fn({company: this.addForm}).then(res => {
 				this.$message({
-					message: (this.id || this.roles == 'company')?'修改成功' : '添加成功',
+					message: (this.id || this.roles == 'company') ? '修改成功' : '添加成功',
 					type: 'success'
 				})
 				this.fileList = []

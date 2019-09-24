@@ -241,6 +241,7 @@ export const asyncRoutes = [
 			hidden: true,
 			component: () => import('@/views/LOGISTICS/recharge/add'),
 			meta: {
+				title: '充值',
 				roles: ['company']
 			}
 		}]
@@ -255,8 +256,8 @@ export const asyncRoutes = [
 			icon: 'example',
 	  },
 	  children: [{
-	      path: 'dmlist',
-	      name: 'list',
+	      path: 'list',
+	      name: 'dmist',
 	      component: () => import('@/views/LOGISTICS/driverManagement/list'),
 	      meta: {
 	        title: '司机列表',
@@ -278,8 +279,9 @@ export const asyncRoutes = [
 				path: 'edit',
 				name: 'dmEdit',
 				hidden: true,
-				component: () => import('@/views/LOGISTICS/driverManagement/edit'),
+				component: () => import('@/views/LOGISTICS/driverManagement/add'),
 				meta: {
+				  title: '修改司机',
 					roles: ['company']
 				}
 			}

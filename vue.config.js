@@ -49,7 +49,15 @@ module.exports = {
 			},
 			'/img': {
 			  // target: `http://127.0.0.1:${port}/mock`,
-			  target: `http://172.19.81.144:7001`,
+			  target: `http://172.19.80.182:7001`,
+			  changeOrigin: true,
+			  // pathRewrite: {
+			  //   ['^' + process.env.VUE_APP_BASE_API]: ''
+			  // }
+			},
+			'/excel': {
+			  // target: `http://127.0.0.1:${port}/mock`,
+			  target: `http://172.19.80.182:7001`,
 			  changeOrigin: true,
 			  // pathRewrite: {
 			  //   ['^' + process.env.VUE_APP_BASE_API]: ''
