@@ -220,18 +220,22 @@ export default {
       if (code === 20000) {
         const count = response.data.count || 0
         const len = response.data.fail_msg.length || 0
-        console.log(len)
-        this.$confirm('上传成功', {
-          confirmButtonText: '确定',
+        const _errData = response.data.fail_msg
+        const newDatas = []
+        const h = this.$createElement
+        for (const i in _errData) {
+          newDatas.push(h('p', null, _errData[i]))
+        }
+        this.$msgbox({
+          title: `共上传${count}条  上传成功${count - len}条  失败${len}条`,
+          message: h('div', null, [
+            h('div', null, '失败原因: '),
+            h('div', null, newDatas)
+          ]),
           showCancelButton: false,
-          type: 'success',
-          center: true
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: `上传成功${count}条 失败${len}条`
-          })
-        }).catch(() => {
+          confirmButtonText: '确定'
+        }).then(action => {
+
         })
       } else if (code === 20001) {
         this.$message.error(message)
