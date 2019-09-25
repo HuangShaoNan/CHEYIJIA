@@ -80,8 +80,8 @@ export const asyncRoutes = [
       component: () => import('@/views/CHEYIJIA/CompanyManagement/list'),
       meta: {
         title: '公司列表',
-				icon: 'example',
-				roles: ['admin']
+        icon: 'example',
+        roles: ['admin']
       }
     },
     {
@@ -90,18 +90,18 @@ export const asyncRoutes = [
       component: () => import('@/views/CHEYIJIA/CompanyManagement/add'),
       meta: {
         title: '新增公司',
-				icon: 'example',
-				roles: ['admin']
+        icon: 'example',
+        roles: ['admin']
       }
     },
     {
       path: 'edit',
-			name: 'cmEdit',
-			hidden: true,
-			meta: {
+      name: 'cmEdit',
+      hidden: true,
+      meta: {
         title: '修改资料',
-				roles: ['admin']
-			},
+        roles: ['admin']
+      },
       component: () => import('@/views/CHEYIJIA/CompanyManagement/add')
     }]
 
@@ -122,8 +122,8 @@ export const asyncRoutes = [
       name: 'emList',
       component: () => import('@/views/CHEYIJIA/EmployeeManagement/list'),
       meta: {
-				title: '用户列表',
-				roles: ['admin']
+        title: '用户列表',
+        roles: ['admin']
       }
     },
     {
@@ -131,18 +131,18 @@ export const asyncRoutes = [
       name: 'emAdd',
       component: () => import('@/views/CHEYIJIA/EmployeeManagement/add'),
       meta: {
-				title: '新增用户',
-				roles: ['admin']
+        title: '新增用户',
+        roles: ['admin']
       }
     },
     {
       path: 'edit',
-			name: 'emEdit',
-			hidden: true,
-			meta: {
-				title: '编辑用户',
-				roles: ['admin']
-			},
+      name: 'emEdit',
+      hidden: true,
+      meta: {
+        title: '编辑用户',
+        roles: ['admin']
+      },
       component: () => import('@/views/CHEYIJIA/EmployeeManagement/add')
     }]
   },
@@ -159,36 +159,36 @@ export const asyncRoutes = [
       component: () => import('@/views/CHEYIJIA/CompanyRecharge/recharge'),
       meta: {
         title: '公司充值',
-				icon: 'example',
-				roles: ['admin']
+        icon: 'example',
+        roles: ['admin']
       }
     }]
   },
   {
     // 车易加路由模块 - 开具发票
     path: '/openInvoice',
-		component: Layout,
-		meta: {
-			roles: ['admin']
-		},
+    component: Layout,
+    meta: {
+      roles: ['admin']
+    },
     children: [{
       path: 'open',
       name: 'open',
       component: () => import('@/views/CHEYIJIA/openInvoice/open'),
       meta: {
         title: '开具发票',
-				icon: 'example',
-				roles: ['admin']
+        icon: 'example',
+        roles: ['admin']
       }
     }]
   },
   // {
   //   // 车易加路由模块 -结算管理
   //   path: '/settlement',
-	// 	component: Layout,
-	// 	meta: {
-	// 		roles: ['admin']
-	// 	},
+  // 	component: Layout,
+  // 	meta: {
+  // 		roles: ['admin']
+  // 	},
   //   children: [{
   //     path: 'settlementMg',
   //     name: 'settlementMg',
@@ -217,105 +217,105 @@ export const asyncRoutes = [
         icon: 'example'
       }
     }]
-	},
-	{
-	  // 物流公司路由模块 - 账号充值
-	  path: '/recharge',
-	  component: Layout,
-	  meta: {
-	    roles: ['company']
-	  },
-	  children: [{
-	    path: 'list',
-	    name: 'rechargeList',
-	    component: () => import('@/views/LOGISTICS/recharge/list'),
-	    meta: {
-	      title: '充值记录',
-				icon: 'example',
-				roles: ['company']
-	    }
-		},
-		{
-			path: 'add',
-			name: 'rechargeAdd',
-			hidden: true,
-			component: () => import('@/views/LOGISTICS/recharge/add'),
-			meta: {
-				title: '充值',
-				roles: ['company']
-			}
-		}]
-	},
-	{
-	  // 物流公司路由模块 - 司机管理
-	  path: '/driverManagement',
-	  component: Layout,
-	  meta: {
-			roles: ['company'],
-			title: '司机管理',
-			icon: 'example',
-	  },
-	  children: [{
-	      path: 'list',
-	      name: 'dmist',
-	      component: () => import('@/views/LOGISTICS/driverManagement/list'),
-	      meta: {
-	        title: '司机列表',
-	        icon: 'example',
-	        roles: ['company']
-	      }
-	    },
-	    {
-	      path: 'add',
-	      name: 'dmadd',
-	      component: () => import('@/views/LOGISTICS/driverManagement/add'),
-	      meta: {
-					roles: ['company'],
-					title: '新增司机',
-					icon: 'example',
-	      }
-			},
-			{
-				path: 'edit',
-				name: 'dmEdit',
-				hidden: true,
-				component: () => import('@/views/LOGISTICS/driverManagement/add'),
-				meta: {
-				  title: '修改司机',
-					roles: ['company']
-				}
-			},
-			{
-			  path: 'rechargeCard',
-			  name: 'rechargeCard',
-			  component: () => import('@/views/LOGISTICS/driverManagement/rechargeCard'),
-			  meta: {
-					icon: 'example',
-			    title: '充值卡记录',
-			    roles: ['company']
-			  }
-			}
-	  ]
-	},
-	// {
-	// 	// 物流公司路由模块 - 司机消费记录
-	// 	path: '/expensesRecord',
-	// 	component: Layout,
-	// 	meta: {
-	// 		roles: ['company']
-	// 	},
-	// 	children: [{
-	// 			path: 'list',
-	// 			name: 'erList',
-	// 			component: () => import('@/views/LOGISTICS/expensesRecord/list'),
-	// 			meta: {
-	// 				title: '司机消费记录',
-	// 				icon: 'example',
-	// 				roles: ['company']
-	// 			}
-	// 		}
-	// 	]
-	// },
+  },
+  {
+    // 物流公司路由模块 - 账号充值
+    path: '/recharge',
+    component: Layout,
+    meta: {
+      roles: ['company']
+    },
+    children: [{
+      path: 'list',
+      name: 'rechargeList',
+      component: () => import('@/views/LOGISTICS/recharge/list'),
+      meta: {
+        title: '充值记录',
+        icon: 'example',
+        roles: ['company']
+      }
+    },
+    {
+      path: 'add',
+      name: 'rechargeAdd',
+      hidden: true,
+      component: () => import('@/views/LOGISTICS/recharge/add'),
+      meta: {
+        title: '充值',
+        roles: ['company']
+      }
+    }]
+  },
+  {
+    // 物流公司路由模块 - 司机管理
+    path: '/driverManagement',
+    component: Layout,
+    meta: {
+      roles: ['company'],
+      title: '司机管理',
+      icon: 'example'
+    },
+    children: [{
+      path: 'list',
+      name: 'dmist',
+      component: () => import('@/views/LOGISTICS/driverManagement/list'),
+      meta: {
+        title: '司机列表',
+        icon: 'example',
+        roles: ['company']
+      }
+    },
+    {
+      path: 'add',
+      name: 'dmadd',
+      component: () => import('@/views/LOGISTICS/driverManagement/add'),
+      meta: {
+        roles: ['company'],
+        title: '新增司机',
+        icon: 'example'
+      }
+    },
+    {
+      path: 'edit',
+      name: 'dmEdit',
+      hidden: true,
+      component: () => import('@/views/LOGISTICS/driverManagement/add'),
+      meta: {
+        title: '修改司机',
+        roles: ['company']
+      }
+    },
+    {
+      path: 'rechargeCard',
+      name: 'rechargeCard',
+      component: () => import('@/views/LOGISTICS/driverManagement/rechargeCard'),
+      meta: {
+        icon: 'example',
+        title: '充值卡记录',
+        roles: ['company']
+      }
+    }
+    ]
+  },
+  // {
+  // 	// 物流公司路由模块 - 司机消费记录
+  // 	path: '/expensesRecord',
+  // 	component: Layout,
+  // 	meta: {
+  // 		roles: ['company']
+  // 	},
+  // 	children: [{
+  // 			path: 'list',
+  // 			name: 'erList',
+  // 			component: () => import('@/views/LOGISTICS/expensesRecord/list'),
+  // 			meta: {
+  // 				title: '司机消费记录',
+  // 				icon: 'example',
+  // 				roles: ['company']
+  // 			}
+  // 		}
+  // 	]
+  // },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

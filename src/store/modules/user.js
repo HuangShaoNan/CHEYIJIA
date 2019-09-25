@@ -48,18 +48,18 @@ const actions = {
         if (!data) {
           reject('验证失败 请重新登录.')
         }
-				const { role, name, avatar } = data
-				// roles must be a non-empty array
-				const _avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
-				const _role = []
-				_role.push(role)
+        const { role, name } = data
+        // roles must be a non-empty array
+        const _avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+        const _role = []
+        _role.push(role)
         if (!_role || _role.length <= 0) {
           reject('getInfo: roles must be a non-null array!')
-				}
+        }
 
         commit('SET_ROLES', _role)
-				commit('SET_NAME', name)
-				commit('SET_AVATAR', _avatar)
+        commit('SET_NAME', name)
+        commit('SET_AVATAR', _avatar)
         resolve(_role)
       }).catch(error => {
         reject(error)

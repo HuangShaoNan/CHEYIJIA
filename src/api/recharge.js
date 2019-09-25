@@ -14,7 +14,6 @@ export function getRechargeList(data) {
   })
 }
 
-
 // 确认充值
 export function verify(data) {
   return request({
@@ -23,7 +22,6 @@ export function verify(data) {
     data
   })
 }
-
 
 // 物流公司 新增充值
 export function rechargeAdd(data) {

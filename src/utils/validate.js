@@ -23,5 +23,5 @@ export function validUsername(str) {
  * @returns {Boolean}
  */
 export function validPasswd(str) {
-  return /^(\w){6,20}$/.test(str);
+  return /^(\w){6,20}$/.test(str)
 }

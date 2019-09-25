@@ -19,7 +19,7 @@ export function add(data) {
   return request({
     url: '/company/add',
     method: 'post',
-		data
+    data
   })
 }
 
@@ -36,7 +36,7 @@ export function detail(data) {
 export function update(data) {
   return request({
     url: '/company/update',
-		method: 'post',
-		data
+    method: 'post',
+    data
   })
 }

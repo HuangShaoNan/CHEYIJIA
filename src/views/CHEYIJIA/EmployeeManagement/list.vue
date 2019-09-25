@@ -3,17 +3,17 @@
 <template>
   <div class="app-container">
     <el-button type="primary" @click="handleAdd">新增用户</el-button>
-		<el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
-			<el-option
-				v-for="item in optionslist"
-				:key="item.id"
-				:label="item.name"
-				:value="item.id">
-			</el-option>
-		</el-select>
-		<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-			搜索
-		</el-button>
+    <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
+      <el-option
+        v-for="item in optionslist"
+        :key="item.id"
+        :label="item.name"
+        :value="item.id"
+      />
+    </el-select>
+    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      搜索
+    </el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -33,12 +33,12 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-			 <el-table-column label="手机号" prop="mobile" align="center">
+      <el-table-column label="手机号" prop="mobile" align="center">
         <template slot-scope="scope">
           {{ scope.row.mobile }}
         </template>
       </el-table-column>
-			<el-table-column label="邮箱" prop="email" align="center">
+      <el-table-column label="邮箱" prop="email" align="center">
         <template slot-scope="scope">
           {{ scope.row.email }}
         </template>
@@ -48,11 +48,11 @@
           <span>{{ companyId(scope.row.company_id) }}</span>
         </template>
       </el-table-column>
-			<el-table-column class-name="status-col" label="用户状态" width="110" align="center" prop="state">
-			<template slot-scope="scope">
-				<el-tag type="" v-if="scope.row.state == 0">正常</el-tag>
-				<el-tag type="danger" v-else>冻结</el-tag>
-			</template>
+      <el-table-column class-name="status-col" label="用户状态" width="110" align="center" prop="state">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.state == 0" type="">正常</el-tag>
+          <el-tag v-else type="danger">冻结</el-tag>
+        </template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="创建时间" width="200">
         <template slot-scope="scope">
@@ -66,7 +66,7 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getList" />
   </div>
 </template>
 
@@ -76,73 +76,73 @@ import { getName } from '@/api/base'
 import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
+  filters: {
+    // 格式化时间
+    parseTime(value) {
+      if (!value) return ''
+      return parseTime(value)
+    }
+  },
+  components: { Pagination },
 
   data() {
     return {
-			list: null,
-			total: 0,
-			listLoading: true,
-			listQuery: { // 查询列表参数
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: { // 查询列表参数
         page_index: 1,
-				page_size: 10,
-				company_id: '' // 所属公司标识
-			},
-			optionslist: []
+        page_size: 10,
+        company_id: '' // 所属公司标识
+      },
+      optionslist: []
+    }
+  },
+  computed: {
+    // 物流公司列表查询过滤
+    companyId() {
+      return function(val) {
+        return this.optionslist.find(x => x.id === val).name
+      }
+    },
+    elTag(state) {
+      return state === 0 ? '' : 'danger'
     }
   },
   created() {
-		this.getList()
-		this.getName()
-	},
-	mounted() {
+    this.getList()
+    this.getName()
+  },
+  mounted() {
 
-	},
-	computed: {
-		// 物流公司列表查询过滤
-		companyId() {
-			return function (val) {
-				return this.optionslist.find(x => x.id == val).name
-       }
-		},
-		elTag(state) {
-			return state == 0 ? '' : 'danger'
-		}
-	},
-	filters: {
-		// 格式化时间
-		parseTime (value) {
-			if (!value) return ''
-			return parseTime(value)
-		}
-	},
-	components: { Pagination },
+  },
   methods: {
     // 获取公司列表
     async getList() {
       this.listLoading = true
       const res = await getList(this.listQuery)
-			this.list = res.data.list || []
-			this.total = res.data.total
-			this.listLoading = false
+      this.list = res.data.list || []
+      this.total = res.data.total
+      this.listLoading = false
     },
     // 新增新公司
     handleAdd() {
-      this.$router.push({ path: '/EmployeeManagement/add'})
+      this.$router.push({ path: '/EmployeeManagement/add' })
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/EmployeeManagement/add', query: {id: scope.row.id}  })
-		},
-		// 搜索公司
-		handleFilter() {
-			this.listQuery.page_index = 1
-			this.getList()
-		},
-		// 获取物流公司列表
-		async getName() {
-			let res = await getName()
-			this.optionslist = res.data
-		}
+      this.$router.push({ path: '/EmployeeManagement/add', query: { id: scope.row.id }})
+    },
+    // 搜索公司
+    handleFilter() {
+      this.listQuery.page_index = 1
+      this.getList()
+    },
+    // 获取物流公司列表
+    async getName() {
+      const res = await getName()
+      this.optionslist = res.data
+    }
   }
 }
 </script>

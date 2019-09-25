@@ -2,11 +2,11 @@
 <template>
   <div class="app-container">
     <el-button type="primary" @click="handleAdd">新增司机</el-button>
-		<el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-			搜索
-		</el-button>
+    <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+    <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      搜索
+    </el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -26,7 +26,7 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-			 <el-table-column label="手机号" prop="tax_num" align="center">
+      <el-table-column label="手机号" prop="tax_num" align="center">
         <template slot-scope="scope">
           {{ scope.row.tax_num }}
         </template>
@@ -51,21 +51,21 @@
           {{ scope.row.used_amount || 0 }}
         </template>
       </el-table-column>
-			<el-table-column label="司机类型" width="110" align="center" prop="type">
+      <el-table-column label="司机类型" width="110" align="center" prop="type">
         <template slot-scope="scope">
           {{ DriverType(scope.row.type) }}
         </template>
       </el-table-column>
-			<el-table-column label="卡片类型" width="110" align="center" prop="card_id">
-				<template slot-scope="scope">
-					{{ cardType(scope.row.card_id || 2) }}
-				</template>
+      <el-table-column label="卡片类型" width="110" align="center" prop="card_id">
+        <template slot-scope="scope">
+          {{ cardType(scope.row.card_id || 2) }}
+        </template>
       </el-table-column>
-			<el-table-column class-name="status-col" label="卡片状态" width="110" align="center" prop="state">
-			<template slot-scope="scope">
-				<el-tag type="" v-if="scope.row.state == 0">正常</el-tag>
-				<el-tag type="danger" v-else>冻结</el-tag>
-			</template>
+      <el-table-column class-name="status-col" label="卡片状态" width="110" align="center" prop="state">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.state == 0" type="">正常</el-tag>
+          <el-tag v-else type="danger">冻结</el-tag>
+        </template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="创建时间" width="200">
         <template slot-scope="scope">
@@ -79,7 +79,7 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getDriverList" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getDriverList" />
   </div>
 </template>
 
@@ -89,90 +89,90 @@ import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
+  filters: {
+    // 格式化时间
+    parseTime(value) {
+      if (!value) return ''
+      return parseTime(value)
+    }
+  },
+  components: { Pagination },
   data() {
     return {
-			list: null,
-			total: 0,
-			listLoading: true,
-			listQuery: { // 查询列表参数
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: { // 查询列表参数
         page_index: 1,
-				page_size: 10,
-				name: '',
-				mobile: ''
-			},
-			optionsDriverlist: [
-				{
-					id: 0,
-					name: '内部司机'
-				},
-				{
-					id: 1,
-					name: '外部司机'
-				}
-			],
-			cardTypeList: [
-				{
-					id: 0,
-					name: '私有卡'
-				},
-				{
-					id: 1,
-					name: '共享卡'
-				},
-				{
-					id: 2,
-					name: '未开卡'
-				}
-			]
+        page_size: 10,
+        name: '',
+        mobile: ''
+      },
+      optionsDriverlist: [
+        {
+          id: 0,
+          name: '内部司机'
+        },
+        {
+          id: 1,
+          name: '外部司机'
+        }
+      ],
+      cardTypeList: [
+        {
+          id: 0,
+          name: '私有卡'
+        },
+        {
+          id: 1,
+          name: '共享卡'
+        },
+        {
+          id: 2,
+          name: '未开卡'
+        }
+      ]
+    }
+  },
+  computed: {
+    // 司机类型
+    DriverType() {
+      return function(val) {
+        return this.optionsDriverlist.find(x => x.id === val).name
+      }
+    },
+    // 开卡类型
+    cardType(val) {
+      return function(val) {
+        return this.cardTypeList.find(x => x.id === val).name
+      }
     }
   },
   created() {
     this.getDriverList()
-	},
-	filters: {
-		// 格式化时间
-		parseTime (value) {
-			if (!value) return ''
-			return parseTime(value)
-		}
-	},
-	components: { Pagination },
-	computed: {
-		// 司机类型
-		DriverType() {
-			return function (val) {
-				return this.optionsDriverlist.find(x => x.id == val).name
-       }
-		},
-		// 开卡类型
-		cardType(val) {
-			return function (val) {
-				return this.cardTypeList.find(x => x.id == val).name
-      }
-		}
-	},
+  },
   methods: {
     // 获取公司列表
     async getDriverList() {
       this.listLoading = true
       const res = await getDriverList(this.listQuery)
-			this.list = res.data.list || []
-			this.total = res.data.total
+      this.list = res.data.list || []
+      this.total = res.data.total
       this.listLoading = false
     },
     // 新增新公司
     handleAdd() {
-      this.$router.push({ path: '/driverManagement/add'})
+      this.$router.push({ path: '/driverManagement/add' })
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/driverManagement/add', query: {id: scope.row.id}  })
-		},
-		// 搜索公司
-		handleFilter() {
-			this.listQuery.page_index = 1
-			this.getDriverList()
+      this.$router.push({ path: '/driverManagement/add', query: { id: scope.row.id }})
     },
+    // 搜索公司
+    handleFilter() {
+      this.listQuery.page_index = 1
+      this.getDriverList()
+    }
   }
 }
 </script>

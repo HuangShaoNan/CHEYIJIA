@@ -1,10 +1,10 @@
 <!-- 充值卡记录 -->
 <template>
   <div class="app-container">
-		<el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-			搜索
-		</el-button>
+    <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      搜索
+    </el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -24,7 +24,7 @@
           {{ scope.row.driver_name }}
         </template>
       </el-table-column>
-			 <el-table-column label="手机号" prop="driver_mobile" align="center">
+      <el-table-column label="手机号" prop="driver_mobile" align="center">
         <template slot-scope="scope">
           {{ scope.row.driver_mobile }}
         </template>
@@ -41,55 +41,55 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="rechargeCard" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="rechargeCard" />
   </div>
 </template>
 
 <script>
-import { rechargeCard  } from '@/api/driverManagement'
+import { rechargeCard } from '@/api/driverManagement'
 import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
+  filters: {
+    // 格式化时间
+    parseTime(value) {
+      if (!value) return ''
+      return parseTime(value)
+    }
+  },
+  components: { Pagination },
   data() {
     return {
-			list: null,
-			total: 0,
-			listLoading: true,
-			listQuery: { // 查询列表参数
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: { // 查询列表参数
         page_index: 1,
-				page_size: 10,
-				mobile: ''
-			}
+        page_size: 10,
+        mobile: ''
+      }
     }
+  },
+  computed: {
   },
   created() {
     this.rechargeCard()
-	},
-	filters: {
-		// 格式化时间
-		parseTime (value) {
-			if (!value) return ''
-			return parseTime(value)
-		}
-	},
-	components: { Pagination },
-	computed: {
-	},
+  },
   methods: {
     // 获取充值记录表
     async rechargeCard() {
       this.listLoading = true
       const res = await rechargeCard(this.listQuery)
-			this.list = res.data.list || []
-			this.total = res.data.total
+      this.list = res.data.list || []
+      this.total = res.data.total
       this.listLoading = false
     },
-		// 搜索公司
-		handleFilter() {
-			this.listQuery.page_index = 1
-			this.rechargeCard()
-    },
+    // 搜索公司
+    handleFilter() {
+      this.listQuery.page_index = 1
+      this.rechargeCard()
+    }
   }
 }
 </script>

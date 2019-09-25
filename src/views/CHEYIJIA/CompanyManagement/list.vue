@@ -2,10 +2,10 @@
 <template>
   <div class="app-container">
     <el-button type="primary" @click="handleAdd">新增新公司</el-button>
-		<el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-		<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-			搜索
-		</el-button>
+    <el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+      搜索
+    </el-button>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -25,7 +25,7 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-			 <el-table-column label="企业税号" prop="tax_num" align="center">
+      <el-table-column label="企业税号" prop="tax_num" align="center">
         <template slot-scope="scope">
           {{ scope.row.tax_num }}
         </template>
@@ -40,17 +40,17 @@
           {{ scope.row.used_amount }}
         </template>
       </el-table-column>
-			<el-table-column class-name="status-col" label="营业执照" width="110" align="center" prop="license_url">
+      <el-table-column class-name="status-col" label="营业执照" width="110" align="center" prop="license_url">
         <template slot-scope="scope">
-					<el-link v-if="scope.row.license_url" target="_blank" :href="scope.row.license_url">查看<i class="el-icon-view el-icon--right"></i> </el-link>
-					<el-link v-else >未上传</el-link>
+          <el-link v-if="scope.row.license_url" target="_blank" :href="scope.row.license_url">查看<i class="el-icon-view el-icon--right" /> </el-link>
+          <el-link v-else>未上传</el-link>
         </template>
       </el-table-column>
-			<el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
-			<template slot-scope="scope">
-				<el-tag type="" v-if="scope.row.state == 0">正常</el-tag>
-				<el-tag type="danger" v-else>冻结</el-tag>
-			</template>
+      <el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.state == 0" type="">正常</el-tag>
+          <el-tag v-else type="danger">冻结</el-tag>
+        </template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="创建时间" width="200">
         <template slot-scope="scope">
@@ -64,7 +64,7 @@
         </template>
       </el-table-column>
     </el-table>
-		<pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getCompanyMg" />
+    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getCompanyMg" />
   </div>
 </template>
 
@@ -74,51 +74,51 @@ import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
+  filters: {
+    // 格式化时间
+    parseTime(value) {
+      if (!value) return ''
+      return parseTime(value)
+    }
+  },
+  components: { Pagination },
   data() {
     return {
-			list: null,
-			total: 0,
-			listLoading: true,
-			listQuery: { // 查询列表参数
+      list: null,
+      total: 0,
+      listLoading: true,
+      listQuery: { // 查询列表参数
         page_index: 1,
-				page_size: 10,
-				name: '' // 公司名称
-			}
+        page_size: 10,
+        name: '' // 公司名称
+      }
     }
   },
   created() {
     this.getCompanyMg()
-	},
-	filters: {
-		// 格式化时间
-		parseTime (value) {
-			if (!value) return ''
-			return parseTime(value)
-		}
-	},
-	components: { Pagination },
+  },
   methods: {
     // 获取公司列表
     async getCompanyMg() {
       this.listLoading = true
       const res = await getList(this.listQuery)
-			this.list = res.data.list || []
-			this.total = res.data.total
+      this.list = res.data.list || []
+      this.total = res.data.total
       this.listLoading = false
     },
     // 新增新公司
     handleAdd() {
-      this.$router.push({ path: '/CompanyManagement/add'})
+      this.$router.push({ path: '/CompanyManagement/add' })
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/CompanyManagement/add', query: {id: scope.row.id}  })
-		},
-		// 搜索公司
-		handleFilter() {
-			this.listQuery.page_index = 1
-			this.getCompanyMg()
+      this.$router.push({ path: '/CompanyManagement/add', query: { id: scope.row.id }})
     },
+    // 搜索公司
+    handleFilter() {
+      this.listQuery.page_index = 1
+      this.getCompanyMg()
+    }
   }
 }
 </script>

@@ -54,15 +54,15 @@ import { validUsername, validPasswd } from '@/utils/validate'
 export default {
   name: 'Login',
   data() {
-		// 验证用户名
+    // 验证用户名
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {
         callback(new Error('请输入正确用户名'))
       } else {
         callback()
       }
-		}
-		// 验证密码
+    }
+    // 验证密码
     const validatePassword = (rule, value, callback) => {
       if (!validPasswd(value)) {
         callback(new Error('请输入正确密码'))
@@ -71,7 +71,7 @@ export default {
       }
     }
     return {
-      loginForm: { //提交信息
+      loginForm: { // 提交信息
         mobile: '15010233162',
         password: '123456'
       },
@@ -102,8 +102,8 @@ export default {
       this.$nextTick(() => {
         this.$refs.password.focus()
       })
-		},
-		// 登录接口模块
+    },
+    // 登录接口模块
     handleLogin() {
       this.$refs.loginForm.validate(valid => {
         if (valid) {

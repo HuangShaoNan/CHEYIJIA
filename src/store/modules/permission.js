@@ -19,7 +19,7 @@ function hasPermission(roles, route) {
  * @param roles
  */
 export function filterAsyncRoutes(routes, roles) {
-	const res = []
+  const res = []
   routes.forEach(route => {
     const tmp = { ...route }
     if (hasPermission(roles, tmp)) {
@@ -48,11 +48,11 @@ const mutations = {
 const actions = {
   generateRoutes({ commit }, roles) {
     return new Promise(resolve => {
-      let accessedRoutes
+      let accessedRoutes = null
       // if (roles.includes('company')) {
       //   accessedRoutes = asyncRoutes || []
       // } else {
-        accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
+      accessedRoutes = filterAsyncRoutes(asyncRoutes, roles)
       // }
       commit('SET_ROUTES', accessedRoutes)
       resolve(accessedRoutes)

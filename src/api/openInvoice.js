@@ -14,7 +14,6 @@ export function getInvoiceList(data) {
   })
 }
 
-
 // 确认开票
 export function verifyInvoice(data) {
   return request({
