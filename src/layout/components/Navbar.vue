@@ -11,7 +11,7 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-					<el-dropdown-item divided>
+          <el-dropdown-item divided>
             <span style="display:block;" @click="editPsw">修改密码</span>
           </el-dropdown-item>
           <el-dropdown-item divided>
@@ -42,15 +42,15 @@ export default {
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
-		},
-		// 退出登录
+    },
+    // 退出登录
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=/`)
-		},
-		async editPsw() {
+    },
+    async editPsw() {
 
-		}
+    }
   }
 }
 </script>

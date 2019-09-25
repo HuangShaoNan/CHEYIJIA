@@ -42,28 +42,28 @@ module.exports = {
       '/api': {
         // target: `http://127.0.0.1:${port}/mock`,
         target: `http://172.19.80.182:7001`,
-        changeOrigin: true,
+        changeOrigin: true
         // pathRewrite: {
         //   ['^' + process.env.VUE_APP_BASE_API]: ''
         // }
-			},
-			'/img': {
-			  // target: `http://127.0.0.1:${port}/mock`,
-			  target: `http://172.19.80.182:7001`,
-			  changeOrigin: true,
-			  // pathRewrite: {
-			  //   ['^' + process.env.VUE_APP_BASE_API]: ''
-			  // }
-			},
-			'/excel': {
-			  // target: `http://127.0.0.1:${port}/mock`,
-			  target: `http://172.19.80.182:7001`,
-			  changeOrigin: true,
-			  // pathRewrite: {
-			  //   ['^' + process.env.VUE_APP_BASE_API]: ''
-			  // }
-			}
-    },
+      },
+      '/img': {
+        // target: `http://127.0.0.1:${port}/mock`,
+        target: `http://172.19.80.182:7001`,
+        changeOrigin: true
+        // pathRewrite: {
+        //   ['^' + process.env.VUE_APP_BASE_API]: ''
+        // }
+      },
+      '/excel': {
+        // target: `http://127.0.0.1:${port}/mock`,
+        target: `http://172.19.80.182:7001`,
+        changeOrigin: true
+        // pathRewrite: {
+        //   ['^' + process.env.VUE_APP_BASE_API]: ''
+        // }
+      }
+    }
     // after: require('./mock/mock-server.js')
   },
   configureWebpack: {

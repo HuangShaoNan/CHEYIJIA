@@ -8,10 +8,11 @@
       <el-upload
         class="upload-demo"
         action="/api/uploads/import"
+        :show-file-list="false"
         :headers="headers"
         :on-success="uploadSuccess"
       >
-        <el-button size="small" type="primary">导入Excel</el-button>
+        <el-button type="primary">导入Excel</el-button>
       </el-upload>
     </div>
     <div class="inline"><el-link href="/excel/driver.xlsx" type="primary">下载模版</el-link></div>
@@ -214,7 +215,29 @@ export default {
     },
     // 上传excel成功
     uploadSuccess(response, file, fileList) {
-      console.log(response, file, fileList)
+      console.log(response)
+      const { code, message } = response
+      if (code === 20000) {
+        const count = response.data.count || 0
+        const len = response.data.fail_msg.length || 0
+        console.log(len)
+        this.$confirm('上传成功', {
+          confirmButtonText: '确定',
+          showCancelButton: false,
+          type: 'success',
+          center: true
+        }).then(() => {
+          this.$message({
+            type: 'success',
+            message: `上传成功${count}条 失败${len}条`
+          })
+        }).catch(() => {
+        })
+      } else if (code === 20001) {
+        this.$message.error(message)
+      }
+      // 更新列表
+      this.getDriverList()
     }
   }
 }
