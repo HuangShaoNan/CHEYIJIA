@@ -102,7 +102,7 @@
       </el-table-column>
       <el-table-column align="center" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="verify(scope)">确认充值</el-button>
+          <el-button :disabled="scope.row.state == 1" type="primary" size="small" @click="verify(scope)">确认充值</el-button>
         </template>
       </el-table-column>
     </el-table>

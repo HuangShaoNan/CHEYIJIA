@@ -193,7 +193,7 @@ export default {
         openInvoice({ recharge_id: id, tax_num: value }).then(() => {
           this.$message({
             type: 'success',
-            message: '开票成功!'
+            message: '提交开票成功!'
           })
           // 更新列表
           this.getRechargeList()
