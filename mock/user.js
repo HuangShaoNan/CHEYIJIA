@@ -3,8 +3,8 @@ const tokens = {
   admin: {
     token: 'admin-token'
   },
-  editor: {
-    token: 'editor-token'
+  company: {
+    token: 'company-token'
   }
 }
 
@@ -15,11 +15,11 @@ const users = {
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
     name: 'Super Admin'
   },
-  'editor-token': {
-    roles: ['editor'],
-    introduction: 'I am an editor',
+  'company-token': {
+    roles: ['company'],
+    introduction: 'I am an company',
     avatar: 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif',
-    name: 'Normal Editor'
+    name: 'Normal company'
   }
 }
 
@@ -29,8 +29,9 @@ export default [
     url: '/user/login',
     type: 'post',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
+      // const { username } = config.body
+			// const token = tokens['username']
+			const token = tokens['admin']
 
       // mock error
       if (!token) {
@@ -52,8 +53,9 @@ export default [
     url: '/user/info\.*',
     type: 'get',
     response: config => {
-      const { token } = config.query
-      const info = users[token]
+      // const { token } = config.query
+      // const info = users[token]
+      const info = users['admin-token']
 
       // mock error
       if (!info) {

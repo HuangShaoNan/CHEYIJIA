@@ -11,10 +11,17 @@ export function isExternal(path) {
 }
 
 /**
- * @param {string} str
+ * @param {string} str 用户名为手机号
  * @returns {Boolean}
  */
 export function validUsername(str) {
-  const valid_map = ['admin', 'editor']
-  return valid_map.indexOf(str.trim()) >= 0
+  return /^1(3|4|5|6|7|8|9)\d{9}$/.test(str)
+}
+
+/**
+ * @param {string} str 密码为 6-20个字母、数字、下划线
+ * @returns {Boolean}
+ */
+export function validPasswd(str) {
+  return /^(\w){6,20}$/.test(str)
 }
