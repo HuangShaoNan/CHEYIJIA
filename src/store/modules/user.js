@@ -50,7 +50,7 @@ const actions = {
         }
         const { role, name } = data
         // roles must be a non-empty array
-        const _avatar = 'https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif'
+        const _avatar = '/330-bg.png'
         const _role = []
         _role.push(role)
         if (!_role || _role.length <= 0) {
