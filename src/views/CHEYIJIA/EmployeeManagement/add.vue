@@ -2,25 +2,6 @@
 <template>
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
-      <el-form-item ref="name" label="姓名" prop="name">
-        <el-input v-model="addForm.name" placeholder="请输入姓名" />
-      </el-form-item>
-      <el-form-item ref="password" label="密码" prop="password">
-        <el-input v-model="addForm.password" placeholder="请输入密码/字母/数字/下划线" show-password />
-      </el-form-item>
-      <el-form-item ref="mobile" label="手机号" prop="mobile">
-        <el-input v-model="addForm.mobile" placeholder="请输入手机号" />
-      </el-form-item>
-      <el-form-item label="邮箱" prop="email">
-        <el-input v-model="addForm.email" placeholder="请输入邮箱" />
-      </el-form-item>
-      <el-form-item label="是否冻结">
-        <el-switch
-          v-model="addForm.state"
-          :active-value="1"
-          :inactive-value="0"
-        />
-      </el-form-item>
       <el-form-item v-if="!id" ref="company_id" label="所属公司" prop="company_id">
         <el-select v-model="addForm.company_id" filterable placeholder="请选择/搜索所属公司">
           <el-option
@@ -30,6 +11,25 @@
             :value="item.id"
           />
         </el-select>
+      </el-form-item>
+      <el-form-item ref="name" label="姓名" prop="name">
+        <el-input v-model="addForm.name" placeholder="请输入姓名" />
+      </el-form-item>
+      <el-form-item ref="mobile" label="手机号" prop="mobile">
+        <el-input v-model="addForm.mobile" placeholder="请输入手机号" />
+      </el-form-item>
+      <el-form-item ref="password" label="密码" prop="password">
+        <el-input v-model="addForm.password" placeholder="请输入密码/字母/数字/下划线" show-password />
+      </el-form-item>
+      <el-form-item label="邮箱" prop="email">
+        <el-input v-model="addForm.email" placeholder="请输入邮箱" />
+      </el-form-item>
+      <el-form-item v-if="id" label="是否冻结">
+        <el-switch
+          v-model="addForm.state"
+          :active-value="1"
+          :inactive-value="0"
+        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="onSubmit">提交</el-button>

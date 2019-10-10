@@ -70,7 +70,7 @@ export const asyncRoutes = [
     name: 'CompanyManagement',
     redirect: '/CompanyManagement/list',
     meta: {
-      title: '公司管理',
+      title: '物流公司管理',
       icon: 'table',
       roles: ['admin']
     },
@@ -113,7 +113,7 @@ export const asyncRoutes = [
     name: 'EmployeeManagement',
     redirect: '/EmployeeManagement/list',
     meta: {
-      title: '员工管理',
+      title: '物流公司用户',
       icon: 'example',
       roles: ['admin']
     },
@@ -176,7 +176,7 @@ export const asyncRoutes = [
       name: 'open',
       component: () => import('@/views/CHEYIJIA/openInvoice/open'),
       meta: {
-        title: '开具发票',
+        title: '发票申请',
         icon: 'example',
         roles: ['admin']
       }

@@ -1,33 +1,48 @@
 <!-- 公司员工管理 模块 -->
 <template>
   <div class="app-container">
-    <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
-      <el-option
-        v-for="item in optionslist"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-select v-model="listQuery.state" filterable placeholder="请选择充值状态">
-      <el-option
-        v-for="item in optionsState"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择是否开票">
-      <el-option
-        v-for="item in optionsInvoice"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <div class="tr">
+      <el-select v-model="listQuery.company_id" filterable placeholder="">
+        <el-option
+          label="请选择/搜索所属公司"
+          :value="''"
+        />
+        <el-option
+          v-for="item in optionslist"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
+      <el-select v-model="listQuery.state" filterable placeholder="">
+        <el-option
+          label="请选择充值状态"
+          :value="''"
+        />
+        <el-option
+          v-for="item in optionsState"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
+      <el-select v-model="listQuery.write_invoice" filterable placeholder="">
+        <el-option
+          label="请选择开票状态"
+          :value="''"
+        />
+        <el-option
+          v-for="item in optionsInvoice"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        搜索
+      </el-button>
+    </div>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -132,7 +147,7 @@ export default {
       listLoading: true,
       listQuery: { // 查询列表参数
         page_index: 1,
-        page_size: 10,
+        page_size: 20,
         company_id: '', // 所属公司标识
         state: '', // 充值状态
         write_invoice: '' // 是否开发票
@@ -172,13 +187,13 @@ export default {
     // 物流公司列表查询过滤
     companyId() {
       return function(val) {
-        return this.optionslist.find(x => x.id === val).name
+        return this.optionslist.length > 0 ? this.optionslist.find(x => x.id === val).name : '--'
       }
     }
   },
   created() {
-    this.getRechargeList()
     this.getName()
+    this.getRechargeList()
   },
   mounted() {
 

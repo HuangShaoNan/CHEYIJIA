@@ -2,18 +2,28 @@
 <!-- 公司管理 公司列表 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">新增用户</el-button>
-    <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
-      <el-option
-        v-for="item in optionslist"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="12">
+        <el-button type="primary" @click="handleAdd">新增用户</el-button>
+      </el-col>
+      <el-col :span="12" class="tr">
+        <el-select v-model="listQuery.company_id" filterable placeholder="请选择">
+          <el-option
+            label="全部公司/模糊搜索"
+            :value="''"
+          />
+          <el-option
+            v-for="item in optionslist"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          搜索
+        </el-button>
+      </el-col>
+    </el-row>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -92,7 +102,7 @@ export default {
       listLoading: true,
       listQuery: { // 查询列表参数
         page_index: 1,
-        page_size: 10,
+        page_size: 20,
         company_id: '' // 所属公司标识
       },
       optionslist: []
@@ -102,7 +112,7 @@ export default {
     // 物流公司列表查询过滤
     companyId() {
       return function(val) {
-        return this.optionslist.find(x => x.id === val).name
+        return this.optionslist.length > 0 ? this.optionslist.find(x => x.id === val).name : '--'
       }
     },
     elTag(state) {

@@ -21,7 +21,7 @@
       <el-form-item label="上传营业执照">
         <el-upload
           class="upload-demo"
-          action="api/uploads?type=img"
+          action="/api/uploads?type=img"
           :before-remove="beforeRemove"
           :on-success="handleSuccess"
           list-type="picture"
@@ -124,9 +124,7 @@ export default {
       this.$refs.addForm.validate(valid => {
         if (valid) {
           this.SubmitFn()
-          if (this.roles === 'admin') {
-            this.$router.push({ path: '/CompanyManagement/list' })
-          } else {
+          if (this.roles !== 'admin') {
             // 刷新详情
             this.getInfo()
           }
@@ -144,6 +142,7 @@ export default {
           type: 'success'
         })
         this.fileList = []
+        this.$router.push('list')
       })
     },
     // 取消

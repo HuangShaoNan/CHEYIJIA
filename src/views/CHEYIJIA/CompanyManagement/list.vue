@@ -1,11 +1,17 @@
 <!-- 公司管理 公司列表 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">新增新公司</el-button>
-    <el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="12">
+        <el-button type="primary" @click="handleAdd">新增新公司</el-button>
+      </el-col>
+      <el-col :span="12" class="tr">
+        <el-input v-model="listQuery.name" placeholder="请输入公司名称" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          搜索
+        </el-button>
+      </el-col>
+    </el-row>
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -89,7 +95,7 @@ export default {
       listLoading: true,
       listQuery: { // 查询列表参数
         page_index: 1,
-        page_size: 10,
+        page_size: 20,
         name: '' // 公司名称
       }
     }
@@ -122,6 +128,6 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
