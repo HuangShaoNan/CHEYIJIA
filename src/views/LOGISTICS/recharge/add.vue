@@ -2,7 +2,7 @@
 <template>
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
-      <el-form-item ref="card_name" label="转账账户名" prop="card_name">
+      <el-form-item ref="card_name" label="账户名" prop="card_name">
         <el-input v-model="addForm.card_name" />
       </el-form-item>
       <el-form-item ref="card_num" label="转账卡号" prop="card_num">

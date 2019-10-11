@@ -12,6 +12,7 @@
         </el-button>
       </el-col>
     </el-row>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -41,7 +42,7 @@
           <span>{{ scope.row.available_amount }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="已用额度" width="110" align="center" prop="used_amount">
+      <el-table-column label="已用金额" width="110" align="center" prop="used_amount">
         <template slot-scope="scope">
           {{ scope.row.used_amount }}
         </template>
@@ -118,7 +119,7 @@ export default {
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/CompanyManagement/add', query: { id: scope.row.id }})
+      this.$router.push({ path: '/CompanyManagement/edit', query: { id: scope.row.id }})
     },
     // 搜索公司
     handleFilter() {

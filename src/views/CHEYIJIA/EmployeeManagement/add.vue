@@ -18,7 +18,7 @@
       <el-form-item ref="mobile" label="手机号" prop="mobile">
         <el-input v-model="addForm.mobile" placeholder="请输入手机号" />
       </el-form-item>
-      <el-form-item ref="password" label="密码" prop="password">
+      <el-form-item v-if="!id" ref="password" label="密码" prop="password">
         <el-input v-model="addForm.password" placeholder="请输入密码/字母/数字/下划线" show-password />
       </el-form-item>
       <el-form-item label="邮箱" prop="email">
@@ -27,6 +27,13 @@
       <el-form-item v-if="id" label="是否冻结">
         <el-switch
           v-model="addForm.state"
+          :active-value="1"
+          :inactive-value="0"
+        />
+      </el-form-item>
+      <el-form-item v-if="!id" label="发送短信通知">
+        <el-switch
+          v-model="addForm.sms"
           :active-value="1"
           :inactive-value="0"
         />
@@ -84,7 +91,8 @@ export default {
         email: '',
         password: '',
         company_id: '', // 所属公司
-        state: false // 状态
+        state: 0, // 状态
+        sms: 1
       },
       addRules: { // 信息规则验证
         name: [{ required: true, trigger: 'blur', validator: validateName }],

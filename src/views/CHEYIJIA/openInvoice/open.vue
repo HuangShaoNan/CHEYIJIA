@@ -2,17 +2,34 @@
 <!-- 公司管理 公司列表 -->
 <template>
   <div class="app-container">
-    <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
-      <el-option
-        v-for="item in optionslist"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <div class="tr">
+      <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
+        <el-option
+          label="请选择/搜索所属公司"
+          :value="''"
+        />
+        <el-option
+          v-for="item in optionslist"
+          :key="item.id"
+          :label="item.name"
+          :value="item.id"
+        />
+      </el-select>
+      <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择开票状态">
+        <el-option
+          label="申请开票"
+          :value="1"
+        />
+        <el-option
+          label="已开发票"
+          :value="2"
+        />
+      </el-select>
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        搜索
+      </el-button>
+    </div>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -27,12 +44,21 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="所属公司" width="110" prop="c_id" align="center">
+      <el-table-column label="公司名称" width="110" prop="c_id" align="center">
         <template slot-scope="scope">
           <span>{{ companyId(scope.row.c_id) }}</span>
         </template>
       </el-table-column>
-
+      <el-table-column label="公司地址" prop="write_invoice" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.address }}
+        </template>
+      </el-table-column>
+      <el-table-column label="企业税号" prop="tax_num" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.tax_num }}
+        </template>
+      </el-table-column>
       <el-table-column label="开票金额" prop="amount" align="center">
         <template slot-scope="scope">
           {{ scope.row.amount }}
@@ -43,14 +69,25 @@
           {{ scope.row.NAME }}
         </template>
       </el-table-column>
+      <el-table-column label="手机号" prop="NAME" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.mobile }}
+        </template>
+      </el-table-column>
+      <el-table-column label="发票快递信息" prop="express_name" align="center">
+        <template slot-scope="scope">
+          <div>{{ scope.row.express }}</div>
+          <span>{{ scope.row.express_num }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="申请时间" prop="create_date" align="center">
         <template slot-scope="scope">
           {{ scope.row.create_date | parseTime }}
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
+      <el-table-column v-if="listQuery.write_invoice === 1" align="center" label="操作" width="100">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="verify(scope)">开票</el-button>
+          <el-button v-if="scope.row.write_invoice === 1" type="primary" size="small" @click="verify(scope)">开票</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -81,7 +118,8 @@ export default {
       listQuery: { // 查询列表参数
         page_index: 1,
         page_size: 10,
-        company_id: '' // 所属公司标识
+        company_id: '', // 所属公司标识
+        write_invoice: 1
       },
       optionslist: [] // 所属公司列表
     }
@@ -95,11 +133,10 @@ export default {
     }
   },
   created() {
-    this.getInvoiceList()
     this.getName()
   },
   mounted() {
-
+    this.getInvoiceList()
   },
   methods: {
     // 获取公司列表

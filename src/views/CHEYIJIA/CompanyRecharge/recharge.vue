@@ -85,23 +85,19 @@
           <el-link v-if="scope.row.recharge_img" target="_blank" :href="scope.row.recharge_img">查看<i class="el-icon-view el-icon--right" /> </el-link>
         </template>
       </el-table-column>
-      <el-table-column label="发票状态" prop="write_invoice" align="center">
-        <template slot-scope="scope">
-          <el-tag type="">{{ scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票' }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="企业税号" prop="tax_num" align="center">
         <template slot-scope="scope">
           {{ scope.row.tax_num }}
         </template>
       </el-table-column>
-      <el-table-column label="快递名称" prop="express_name" align="center">
+      <el-table-column label="发票状态" prop="write_invoice" align="center">
         <template slot-scope="scope">
-          {{ scope.row.express }}
+          <el-tag type="">{{ scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="快递单号" width="110" prop="express_num" align="center">
+      <el-table-column label="发票快递信息" prop="express_name" align="center">
         <template slot-scope="scope">
+          <div>{{ scope.row.express }}</div>
           <span>{{ scope.row.express_num }}</span>
         </template>
       </el-table-column>

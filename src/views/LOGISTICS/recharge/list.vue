@@ -1,26 +1,33 @@
 <!-- 公司账号充值 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">充值</el-button>
-    <el-select v-model="listQuery.state" filterable placeholder="请选择充值状态">
-      <el-option
-        v-for="item in optionsState"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择是否开票">
-      <el-option
-        v-for="item in optionsInvoice"
-        :key="item.id"
-        :label="item.name"
-        :value="item.id"
-      />
-    </el-select>
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="8">
+        <el-button type="primary" @click="handleAdd">充值</el-button>
+      </el-col>
+      <el-col :span="16" class="tr">
+        <el-select v-model="listQuery.state" filterable placeholder="请选择充值状态">
+          <el-option
+            v-for="item in optionsState"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择是否开票">
+          <el-option
+            v-for="item in optionsInvoice"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          搜索
+        </el-button>
+      </el-col>
+    </el-row>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -36,7 +43,7 @@
         </template>
       </el-table-column>
 
-      <el-table-column label="转账账户名" prop="card_name" align="center">
+      <el-table-column label="账户名" prop="card_name" align="center">
         <template slot-scope="scope">
           {{ scope.row.card_name }}
         </template>
@@ -63,24 +70,20 @@
           <el-link v-if="scope.row.recharge_img" target="_blank" :href="scope.row.recharge_img">查看<i class="el-icon-view el-icon--right" /> </el-link>
         </template>
       </el-table-column>
-      <el-table-column label="发票状态" prop="write_invoive" align="center">
-        <template slot-scope="scope">
-          <el-tag type="">{{ scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票' }}</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="企业税号" prop="tax_num" align="center">
         <template slot-scope="scope">
           {{ scope.row.tax_num }}
         </template>
       </el-table-column>
-      <el-table-column label="快递名称" prop="express_name" align="center">
+      <el-table-column label="发票状态" prop="write_invoive" align="center">
         <template slot-scope="scope">
-          {{ scope.row.express }}
+          <el-tag type="">{{ scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票' }}</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="快递单号" width="110" prop="express_num" align="center">
+      <el-table-column label="发票快递信息" prop="express_name" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.express_num }}</span>
+          <div>{{ scope.row.express }}</div>
+          <div>{{ scope.row.express_num }}</div>
         </template>
       </el-table-column>
       <el-table-column label="充值时间" prop="create_date" align="center">
@@ -91,7 +94,7 @@
       <el-table-column align="center" label="操作" width="100">
         <template slot-scope="scope">
           <!-- 开票状态未开票和申请中 充值状态成功 才可开票  -->
-          <el-button type="primary" :disabled="(scope.row.state !== 1 || scope.row.write_invoice == 2 || scope.row.write_invoice == 1 )" size="small" @click="openInvoice(scope)">开票</el-button>
+          <el-button type="primary" :disabled="(scope.row.state !== 1 || scope.row.write_invoice == 2 || scope.row.write_invoice == 1 )" size="small" @click="openInvoice(scope)">申请开票</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -128,6 +131,10 @@ export default {
       enterpriseName: '', // 企业名称
       optionsState: [
         {
+          id: '',
+          name: '全部'
+        },
+        {
           id: 0,
           name: '充值中'
         },
@@ -141,6 +148,10 @@ export default {
         }
       ], // 充值状态
       optionsInvoice: [
+        {
+          id: '',
+          name: '全部'
+        },
         {
           id: 0,
           name: '未开票'
@@ -175,25 +186,26 @@ export default {
       this.total = res.data.total
       this.listLoading = false
     },
-    // 确认充值
+    // 申请开票
     openInvoice(scope) {
-      const { id } = scope.row
+      const { id, tax_num } = scope.row
       const h = this.$createElement
-      this.$prompt('请输入企业税号', '开具发票', {
+      this.$prompt('请输入企业税号', '申请开具发票', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         inputPattern: /\S/,
+        inputValue: tax_num,
         inputPlaceholder: '请输入企业税号',
         inputErrorMessage: '企业税号不能为空',
         message: h('p', null, [
-          h('span', null, '企业名称： '),
+          h('span', null, '企业名称及开票税号： '),
           h('i', { style: 'color: teal' }, `${this.enterpriseName}`)
         ])
       }).then(({ value }) => {
         openInvoice({ recharge_id: id, tax_num: value }).then(() => {
           this.$message({
             type: 'success',
-            message: '提交开票成功!'
+            message: '开具发票申请成功，等待邮寄!'
           })
           // 更新列表
           this.getRechargeList()

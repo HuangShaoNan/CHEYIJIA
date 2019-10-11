@@ -112,7 +112,11 @@ export default {
     // 物流公司列表查询过滤
     companyId() {
       return function(val) {
-        return this.optionslist.length > 0 ? this.optionslist.find(x => x.id === val).name : '--'
+        let curCom = null
+        if (this.optionslist.length > 0) {
+          curCom = this.optionslist.find(x => x.id === val)
+        }
+        return curCom ? curCom.name : '--'
       }
     },
     elTag(state) {
@@ -141,7 +145,7 @@ export default {
     },
     // 修改
     handleEdit(scope) {
-      this.$router.push({ path: '/EmployeeManagement/add', query: { id: scope.row.id }})
+      this.$router.push({ path: '/EmployeeManagement/edit', query: { id: scope.row.id }})
     },
     // 搜索公司
     handleFilter() {

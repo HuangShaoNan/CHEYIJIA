@@ -213,7 +213,7 @@ export const asyncRoutes = [
       name: 'info',
       component: () => import('@/views/CHEYIJIA/CompanyManagement/add'),
       meta: {
-        title: '基本资料',
+        title: '企业信息',
         icon: 'example'
       }
     }]
@@ -223,6 +223,8 @@ export const asyncRoutes = [
     path: '/recharge',
     component: Layout,
     meta: {
+      title: '充值管理',
+      icon: 'example',
       roles: ['company']
     },
     children: [{
@@ -238,10 +240,10 @@ export const asyncRoutes = [
     {
       path: 'add',
       name: 'rechargeAdd',
-      hidden: true,
       component: () => import('@/views/LOGISTICS/recharge/add'),
       meta: {
-        title: '充值',
+        title: '账户充值',
+        icon: 'example',
         roles: ['company']
       }
     }]

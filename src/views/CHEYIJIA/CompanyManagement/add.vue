@@ -3,7 +3,10 @@
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
       <el-form-item ref="name" label="名称" prop="name">
-        <el-input v-model="addForm.name" />
+        <el-input v-model="addForm.name" :disabled="isCompany" />
+      </el-form-item>
+      <el-form-item label="地址">
+        <el-input v-model="addForm.address" />
       </el-form-item>
       <el-form-item label="税号">
         <el-input v-model="addForm.tax_num" />
@@ -18,7 +21,7 @@
           :inactive-value="0"
         />
       </el-form-item>
-      <el-form-item label="上传营业执照">
+      <el-form-item :label="(isCompany ? '' : '上传') + '营业执照'">
         <el-upload
           class="upload-demo"
           action="/api/uploads?type=img"
@@ -26,13 +29,13 @@
           :on-success="handleSuccess"
           list-type="picture"
           :headers="headers"
-          multiple
-          :limit="3"
+          :limit="1"
           :file-list="fileList"
           :on-exceed="handleExceed"
+          :disabled="isCompany"
         >
-          <el-button size="small" type="primary">点击上传</el-button>
-          <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+          <el-button v-if="!isCompany" size="small" type="primary">点击上传</el-button>
+          <div v-if="!isCompany" slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
         </el-upload>
       </el-form-item>
       <el-form-item>
@@ -69,6 +72,7 @@ export default {
     return {
       addForm: {
         name: '',
+        address: '',
         tax_num: '', // 税号
         email: '',
         license_url: '',
@@ -82,13 +86,18 @@ export default {
         email: [{ required: true, trigger: 'blur', validator: validateEmail }]
       },
       id: '',
-      fileList: []
+      fileList: [],
+      isCompany: false
     }
   },
   created() {
     this.id = this.$route.query.id || ''
+    console.log(this.roles)
+
+    this.isCompany = this.roles[0] === 'company'
+
     // 如果id存在是编辑模块 或者是物流公司补充基本资料
-    if (this.id || this.roles === 'company') {
+    if (this.id || this.isCompany) {
       this.getInfo()
     }
   },
@@ -100,7 +109,7 @@ export default {
   },
   methods: {
     handleExceed(files, fileList) {
-      this.$message.warning(`当前限制选择 3 个文件，本次选择了 ${files.length} 个文件，共选择了 ${files.length + fileList.length} 个文件`)
+      this.$message.warning(`最多上传${fileList.length}张图片，请删除后再上传！`)
     },
     beforeRemove(file, fileList) {
       return this.$confirm(`确定移除 ${file.name}？`)
@@ -113,9 +122,9 @@ export default {
     // 获取详情信息
     async getInfo() {
       const info = await detail({ id: this.id })
-      const { name, license_url, tax_num, email, state, id } = info.data
+      const { name, license_url, tax_num, email, state, id, address } = info.data
       this.addForm = {
-        name, license_url, tax_num, email, state, id
+        name, license_url, tax_num, email, state, id, address
       }
       this.fileList.push({ name: '', url: license_url })
     },
@@ -135,14 +144,14 @@ export default {
       })
     },
     SubmitFn() {
-      const Fn = (this.id || this.roles === 'company') ? update : add
+      const Fn = (this.id || this.roles[0] === 'company') ? update : add
       Fn({ company: this.addForm }).then(res => {
         this.$message({
-          message: (this.id || this.roles === 'company') ? '修改成功' : '添加成功',
+          message: (this.id || this.roles[0] === 'company') ? '修改成功' : '添加成功',
           type: 'success'
         })
         this.fileList = []
-        this.$router.push('list')
+        this.id && this.$router.push('list')
       })
     },
     // 取消
@@ -154,6 +163,9 @@ export default {
 </script>
 
 <style scoped>
+.disable_but {
+  background-color:#a0cfff;
+}
 .line{
   text-align: center;
 }
