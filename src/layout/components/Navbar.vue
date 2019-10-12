@@ -51,7 +51,7 @@ export default {
       this.$router.push(`/login?redirect=/`)
     },
     async editPsw() {
-
+      this.$router.push('/update/password')
     }
   }
 }

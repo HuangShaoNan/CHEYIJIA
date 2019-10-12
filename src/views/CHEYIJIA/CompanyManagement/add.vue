@@ -2,6 +2,9 @@
 <template>
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
+      <el-form-item v-if="isCompany" label="企业余额">
+        <div class="amount-num">￥{{ available_amount }}</div>
+      </el-form-item>
       <el-form-item ref="name" label="名称" prop="name">
         <el-input v-model="addForm.name" :disabled="isCompany" />
       </el-form-item>
@@ -87,7 +90,8 @@ export default {
       },
       id: '',
       fileList: [],
-      isCompany: false
+      isCompany: false,
+      available_amount: 0
     }
   },
   created() {
@@ -122,7 +126,8 @@ export default {
     // 获取详情信息
     async getInfo() {
       const info = await detail({ id: this.id })
-      const { name, license_url, tax_num, email, state, id, address } = info.data
+      const { name, license_url, tax_num, email, state, id, address, available_amount } = info.data
+      this.available_amount = available_amount
       this.addForm = {
         name, license_url, tax_num, email, state, id, address
       }
@@ -163,6 +168,10 @@ export default {
 </script>
 
 <style scoped>
+.amount-num {
+  color: red;
+  font-size: 30px;
+}
 .disable_but {
   background-color:#a0cfff;
 }

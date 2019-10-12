@@ -44,6 +44,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/update',
+    component: Layout,
+    children: [{
+      path: 'password',
+      name: 'password',
+      component: () => import('@/views/update_password'),
+      meta: { title: '修改密码', icon: 'example' }
+    }],
+    hidden: true
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/dashboard',
@@ -113,7 +125,7 @@ export const asyncRoutes = [
     name: 'EmployeeManagement',
     redirect: '/EmployeeManagement/list',
     meta: {
-      title: '物流公司用户',
+      title: '公司用户',
       icon: 'example',
       roles: ['admin']
     },

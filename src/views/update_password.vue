@@ -1,16 +1,16 @@
 <template>
-  <div class="app-container">
-    <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
-      <el-form-item ref="card_name" label="账户名" prop="card_name">
-        <el-input v-model="addForm.card_name" />
+  <div class="app-container"><br><br>
+    <el-form ref="form" :model="form" :rules="addRules" label-width="120px">
+      <el-form-item ref="password" label="原密码" prop="password">
+        <el-input v-model="form.password" type="password" />
       </el-form-item>
-      <el-form-item ref="card_num" label="转账卡号" prop="card_num">
-        <el-input v-model="addForm.card_num" />
+      <el-form-item ref="newPassword" label="新密码" prop="newPassword">
+        <el-input v-model="form.newPassword" type="password" />
       </el-form-item>
-      <el-form-item ref="amount" label="转账金额" prop="amount">
-        <el-input v-model="addForm.amount" />
+      <el-form-item ref="qrPassword" label="确认密码" prop="qrPassword">
+        <el-input v-model="form.qrPassword" type="password" />
       </el-form-item>
-      <el-form-item>
+      <el-form-item><br><br>
         <el-button type="primary" @click="onSubmit">提交</el-button>
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
@@ -19,53 +19,48 @@
 </template>
 
 <script>
-import { rechargeAdd } from '@/api/recharge'
+import { update } from '@/api/EmployeeManagement'
 import { getToken } from '@/utils/auth'
 
 export default {
   data() {
-    //
-    const validateCardName = (rule, value, callback) => {
-      if ((value === '')) {
-        callback(new Error('请输入转账账户名'))
+    const validatePassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('密码至少6位'))
       } else {
         callback()
       }
     }
-    const validateCardNum = (rule, value, callback) => {
-      if ((value === '')) {
-        callback(new Error('请输入转账卡号'))
+    const newPassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('密码至少6位'))
       } else {
         callback()
       }
     }
-    const validateAmount = (rule, value, callback) => {
-      if ((value === '')) {
-        callback(new Error('请输入充值金额'))
+    const qrPassword = (rule, value, callback) => {
+      if (value.length < 6) {
+        callback(new Error('密码至少6位'))
       } else {
         callback()
       }
     }
     return {
-      addForm: {
-        card_name: '',
-        card_num: '',
-        amount: '',
-        recharge_img: ''
+      form: {
+        password: '',
+        newPassword: '',
+        qrPassword: ''
       },
       headers: {
         'X-token': getToken()
       },
       addRules: { // 信息规则验证
-        card_name: [{ required: true, trigger: 'blur', validator: validateCardName }],
-        card_num: [{ required: true, trigger: 'blur', validator: validateCardNum }],
-        amount: [{ required: true, trigger: 'blur', validator: validateAmount }]
+        password: [{ required: true, trigger: 'blur', validator: validatePassword }],
+        newPassword: [{ required: true, trigger: 'blur', validator: newPassword }],
+        qrPassword: [{ required: true, trigger: 'blur', validator: qrPassword }]
       },
-      id: '',
       fileList: []
     }
-  },
-  computed: {
   },
   created() {
 
@@ -73,14 +68,14 @@ export default {
   methods: {
     // 提交
     onSubmit() {
-      this.$refs.addForm.validate(valid => {
+      this.$refs.form.validate(valid => {
         if (valid) {
-          rechargeAdd({ recharge: this.addForm }).then(() => {
+          update({ user: this.form }).then(() => {
             this.$message({
-              message: '提交成功',
+              message: '密码修改成功',
               type: 'success'
             })
-            this.$router.push({ path: '/recharge/list' })
+            this.onCancel()
           })
         } else {
           console.log('error submit!!')
@@ -97,8 +92,8 @@ export default {
 </script>
 
 <style scoped>
-.line{
-  text-align: center;
+.app-container {
+  width: 500px;
 }
 </style>
 

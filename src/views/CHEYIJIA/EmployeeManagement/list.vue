@@ -18,6 +18,10 @@
             :label="item.name"
             :value="item.id"
           />
+          <el-option
+            label="车易加"
+            :value="'0'"
+          />
         </el-select>
         <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
           搜索
