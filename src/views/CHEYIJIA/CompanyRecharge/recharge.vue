@@ -57,7 +57,11 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-
+      <el-table-column label="公司名称" width="110" prop="c_id" align="center">
+        <template slot-scope="scope">
+          <span>{{ companyId(scope.row.c_id) }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="转账账户名" prop="card_name" align="center">
         <template slot-scope="scope">
           {{ scope.row.card_name }}
@@ -83,27 +87,6 @@
       <el-table-column class-name="status-col" label="转账截图" width="110" align="center" prop="recharge_img">
         <template slot-scope="scope">
           <el-link v-if="scope.row.recharge_img" target="_blank" :href="scope.row.recharge_img">查看<i class="el-icon-view el-icon--right" /> </el-link>
-        </template>
-      </el-table-column>
-      <el-table-column label="企业税号" prop="tax_num" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.tax_num }}
-        </template>
-      </el-table-column>
-      <el-table-column label="发票状态" prop="write_invoice" align="center">
-        <template slot-scope="scope">
-          <el-tag type="">{{ scope.row.write_invoice == 0 ? '未开票' : scope.row.write_invoice == 1 ? '申请中' : '已开发票' }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="发票快递信息" prop="express_name" align="center">
-        <template slot-scope="scope">
-          <div>{{ scope.row.express }}</div>
-          <span>{{ scope.row.express_num }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="所属公司" width="110" prop="c_id" align="center">
-        <template slot-scope="scope">
-          <span>{{ companyId(scope.row.c_id) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="充值时间" prop="create_date" align="center">

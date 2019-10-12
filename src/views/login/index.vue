@@ -72,8 +72,8 @@ export default {
     }
     return {
       loginForm: { // 提交信息
-        mobile: '15010233162',
-        password: '123456'
+        mobile: '',
+        password: ''
       },
       loginRules: { // 登录信息规则验证
         mobile: [{ required: true, trigger: 'blur', validator: validateUsername }],

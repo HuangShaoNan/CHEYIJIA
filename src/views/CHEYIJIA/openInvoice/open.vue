@@ -3,7 +3,7 @@
 <template>
   <div class="app-container">
     <div class="tr">
-      <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司">
+      <el-select v-model="listQuery.company_id" filterable placeholder="请选择/搜索所属公司" @change="handleFilter">
         <el-option
           label="请选择/搜索所属公司"
           :value="''"
@@ -15,7 +15,7 @@
           :value="item.id"
         />
       </el-select>
-      <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择开票状态">
+      <el-select v-model="listQuery.write_invoice" filterable placeholder="请选择开票状态" @change="handleFilter">
         <el-option
           label="申请开票"
           :value="1"
@@ -25,9 +25,6 @@
           :value="2"
         />
       </el-select>
-      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-        搜索
-      </el-button>
     </div>
 
     <el-table
@@ -76,7 +73,7 @@
       </el-table-column>
       <el-table-column label="发票快递信息" prop="express_name" align="center">
         <template slot-scope="scope">
-          <div>{{ scope.row.express }}</div>
+          <div>{{ scope.row.express_name }}</div>
           <span>{{ scope.row.express_num }}</span>
         </template>
       </el-table-column>
@@ -91,7 +88,22 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getInvoiceList" />
+    <pagination v-show="total > 0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" @pagination="getInvoiceList" />
+
+    <el-dialog title="发票快递信息" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="快递名称" :label-width="formLabelWidth" class="ipt-w">
+          <el-input v-model="form.express_name" />
+        </el-form-item>
+        <el-form-item label="快递单号" :label-width="formLabelWidth" class="ipt-w">
+          <el-input v-model="form.express_num" />
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="verifyInvoice">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -121,7 +133,14 @@ export default {
         company_id: '', // 所属公司标识
         write_invoice: 1
       },
-      optionslist: [] // 所属公司列表
+      optionslist: [], // 所属公司列表
+      dialogFormVisible: false,
+      form: {
+        express_name: '',
+        express_num: ''
+      },
+      formLabelWidth: '220px',
+      recharge_id: ''
     }
   },
   computed: {
@@ -147,25 +166,32 @@ export default {
       this.total = res.data.total
       this.listLoading = false
     },
-    // 确认充值
+    // 确认开票
     verify(scope) {
-      const { id, express_name, express_num } = scope.row
-      this.$confirm('是否确认开票?', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'info'
-      }).then(() => {
-        verifyInvoice({ recharge_id: id, express_name, express_num }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '开票成功!'
-          })
-          // 更新列表
-          this.getInvoiceList()
+      this.dialogFormVisible = true
+      this.recharge_id = scope.row.id
+    },
+    verifyInvoice() {
+      const { express_name, express_num } = this.form
+      if (express_name === '' || express_num === '') {
+        this.$message({
+          type: 'warning',
+          message: '请输入快递名称及单号!'
         })
-      }).catch(() => {
+        return
+      }
 
+      verifyInvoice({ recharge_id: this.recharge_id, express_name, express_num }).then(() => {
+        this.$message({
+          type: 'success',
+          message: '开票成功!'
+        })
+        this.form.express_name = ''
+        this.form.express_num = ''
+        // 更新列表
+        this.getInvoiceList()
       })
+      this.dialogFormVisible = false
     },
     // 搜索公司
     handleFilter() {
@@ -181,5 +207,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-
+.ipt-w {
+  width: 500px;
+}
 </style>

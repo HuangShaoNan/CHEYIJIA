@@ -116,7 +116,7 @@ export default {
         if (this.optionslist.length > 0) {
           curCom = this.optionslist.find(x => x.id === val)
         }
-        return curCom ? curCom.name : '--'
+        return curCom ? curCom.name : '车易加'
       }
     },
     elTag(state) {

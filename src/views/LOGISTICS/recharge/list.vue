@@ -82,7 +82,7 @@
       </el-table-column>
       <el-table-column label="发票快递信息" prop="express_name" align="center">
         <template slot-scope="scope">
-          <div>{{ scope.row.express }}</div>
+          <div>{{ scope.row.express_name }}</div>
           <div>{{ scope.row.express_num }}</div>
         </template>
       </el-table-column>
@@ -167,15 +167,9 @@ export default {
       ]
     }
   },
-  computed: {
-
-  },
   created() {
     this.getRechargeList()
     this.getInfo()
-  },
-  mounted() {
-
   },
   methods: {
     // 获取公司列表
