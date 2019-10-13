@@ -71,12 +71,7 @@
       </el-table-column>
       <el-table-column label="司机类型" width="110" align="center" prop="type">
         <template slot-scope="scope">
-          {{ DriverType(scope.row.type) }}
-        </template>
-      </el-table-column>
-      <el-table-column label="卡片类型" width="110" align="center" prop="card_type">
-        <template slot-scope="scope">
-          {{ cardType(scope.row.card_type) }}
+          {{ DriverType(scope.row.type) + ' ' + cardType(scope.row.card_type) }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="卡片状态" width="110" align="center" prop="state">
@@ -91,11 +86,10 @@
           <span>{{ scope.row.create_date | parseTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="200">
+      <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
-          <el-button v-if="scope.row.state == 0" type="primary" icon="el-icon-edit" size="small" @click="handleRecharge(scope)">充值</el-button>
-          <el-button v-else disabled type="primary" icon="el-icon-edit" size="small" @click="handleRecharge(scope)">充值</el-button>
+          <el-button v-if="scope.row.state != 0 || scope.row.card_type != 0" type="primary" icon="el-icon-edit" size="small" @click="handleRecharge(scope)">充值</el-button>
         </template>
       </el-table-column>
     </el-table>

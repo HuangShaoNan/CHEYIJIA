@@ -139,9 +139,6 @@ export default {
       ]
     }
   },
-  computed: {
-
-  },
   created() {
     this.id = this.$route.query.id || ''
     this.driver_mobile = this.$route.query.mobile || ''
@@ -157,6 +154,7 @@ export default {
       if (this.addForm.type === 1) {
         this.$set(this.cardTypeList[1], 'disabled', true)
       }
+      this.addForm.card_type = ''
     },
     // 获取详情信息
     async getInfo() {
