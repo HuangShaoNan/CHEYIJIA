@@ -1,30 +1,29 @@
 <!-- 公司管理 公司列表 -->
 <template>
   <div class="app-container">
-		<div class="excel inline">
-			<div class="inline">
-				<el-button type="primary" @click="handleAdd">新增司机</el-button>
-			</div>
-			<div class="inline flex">
-				<el-upload
-					class="upload-demo"
-					action="/api/uploads/import"
-					:show-file-list="false"
-					:headers="headers"
-					:on-success="uploadSuccess"
-				>
-					<el-button type="primary">批量导入司机</el-button>
-				</el-upload>
-				<div class="inline download-text"><el-link href="/excel/driver.xlsx" type="primary">下载模版</el-link></div>
-			</div>
-			<div class="search-content">
-				<el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-				<el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-				<el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-					搜索
-				</el-button>
-			</div>
-		</div>
+    <div class="excel inline">
+      <div class="inline">
+        <el-button type="primary" @click="handleAdd">新增司机</el-button>
+      </div>
+      <div class="inline flex">
+        <el-upload
+          class="upload-demo"
+          action="/api/uploads/import"
+          :show-file-list="false"
+          :headers="headers"
+          :on-success="uploadSuccess"
+        >
+          <el-button type="primary">批量导入司机</el-button>
+        </el-upload>
+        <div class="inline download-text"><el-link href="/excel/driver.xlsx" type="primary">下载模版</el-link></div>
+      </div>
+      <div class="search-content">
+        <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">搜索</el-button>
+      </div>
+    </div>
+
     <el-table
       v-loading="listLoading"
       :data="list"
