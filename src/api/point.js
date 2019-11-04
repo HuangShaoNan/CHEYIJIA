@@ -8,7 +8,7 @@ export function list(data) {
   })
 }
 
-export function info(data) {
+export function detail(data) {
   return request({
     url: '/service_point/info',
     method: 'post',

@@ -24,19 +24,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="地址" prop="address">
-        <el-input v-model="addForm.address" class="ipt-address" />&nbsp; <el-link type="primary" icon="el-icon-map-location">地图选点</el-link>
-        <div>经纬度：{{ addForm.lng }} &nbsp; {{ addForm.lat }}</div>
+        <el-input v-model="addForm.address" class="ipt-address" />&nbsp; <el-link type="primary" icon="el-icon-map-location" @click="showMap">定位获取经纬度</el-link>
+        <div>经度：{{ addForm.lng || '--' }} &nbsp; 纬度：{{ addForm.lat || '--' }}</div>
       </el-form-item>
       <el-form-item label="加注点照片">
         <el-upload
           class="upload-demo"
           action="/api/uploads?type=img"
-          :before-remove="beforeRemove"
-          :on-success="handleSuccess"
+          :on-success="photoSuccess"
+          :on-remove="photoRemove"
           list-type="picture"
           :headers="headers"
           :limit="1"
-          :file-list="fileList"
+          :file-list="photo"
           :on-exceed="handleExceed"
         >
           <el-button size="small" type="primary">点击上传</el-button>
@@ -62,19 +62,19 @@
       <el-form-item label="负责人" prop="staff_name">
         <el-input v-model="addForm.staff_name" />
       </el-form-item>
-      <el-form-item label="负责人电话" prop="staff_mobile">
+      <el-form-item label="手机号" prop="staff_mobile">
         <el-input v-model="addForm.staff_mobile" />
       </el-form-item>
       <el-form-item label="营业执照">
         <el-upload
           class="upload-demo"
           action="/api/uploads?type=img"
-          :before-remove="beforeRemove"
-          :on-success="handleSuccess"
+          :on-success="licenseSuccess"
+          :on-remove="licenseRemove"
           list-type="picture"
           :headers="headers"
           :limit="1"
-          :file-list="fileList"
+          :file-list="license"
           :on-exceed="handleExceed"
         >
           <el-button size="small" type="primary">点击上传</el-button>
@@ -86,14 +86,31 @@
         <el-button @click="onCancel">取消</el-button>
       </el-form-item>
     </el-form>
+
+    <el-dialog
+      title="加注点定位"
+      :visible.sync="dialogVisible"
+      width="80%"
+    >
+      <div>
+        <div class="map-content">
+          <div>
+            <el-input v-model="addForm.address" class="ipt-address" @input="showMap" />
+            经度：{{ addForm.lng || '--' }} &nbsp; 纬度：{{ addForm.lat || '--' }}
+          </div>
+          <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
+        </div>
+        <div id="mymap" class="baidu-map" />
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { add, detail, update } from '@/api/CompanyManagement'
+import { add, detail, edit } from '@/api/point'
 import { getToken } from '@/utils/auth'
-import { mapGetters } from 'vuex'
 const district = import('@/assets/js/district.js')
+import { MP } from '@/utils/map.js'
 
 export default {
   data() {
@@ -119,8 +136,9 @@ export default {
       }
     }
     const vStaffMobile = (rule, value, callback) => {
-      if ((value === '')) {
-        callback(new Error('请输入负责人电话'))
+      const _reg = /^1(3|4|5|6|7|8|9)\d{9}$/
+      if (!_reg.test(value)) {
+        callback(new Error('请输入正确手机号'))
       } else {
         callback()
       }
@@ -135,7 +153,9 @@ export default {
         address: '',
         staff_name: '',
         staff_mobile: '',
-        state: 0
+        state: 0,
+        lng: '',
+        lat: ''
       },
       headers: {
         'X-token': getToken()
@@ -147,7 +167,9 @@ export default {
         staff_mobile: [{ required: true, trigger: 'blur', validator: vStaffMobile }]
       },
       id: '',
-      fileList: []
+      photo: [],
+      license: [],
+      dialogVisible: false
     }
   },
   watch: {
@@ -162,67 +184,129 @@ export default {
   created() {
     this.id = this.$route.query.id || ''
 
-    this.id && this.getInfo()
     district.then(res => {
       this.areaData = res.default
     })
+
+    this.id && this.getInfo()
   },
-  // eslint-disable-next-line vue/order-in-components
-  computed: {
-    ...mapGetters([
-      'roles'
-    ])
+  mounted() {
+    MP().then(BMap => {
+      console.log(BMap)
+    })
   },
   methods: {
-    handleExceed(files, fileList) {
-      this.$message.warning(`最多上传${fileList.length}张图片，请删除后再上传！`)
-    },
-    beforeRemove(file, fileList) {
-      return this.$confirm(`确定移除 ${file.name}？`)
-    },
-    // 上传成功
-    handleSuccess(response, file, fileList) {
-      const { url } = response
-      this.addForm.license_url = url
-    },
     // 获取详情信息
     async getInfo() {
       const info = await detail({ id: this.id })
-      const { name, license_url, tax_num, email, state, id, address } = info.data
-      this.addForm = {
-        name, license_url, tax_num, email, state, id, address
+      this.addForm = info.data
+      info.data.photo && this.photo.push({ name: '', url: info.data.photo })
+      info.data.license_url && this.license.push({ name: '', url: info.data.license_url })
+
+      const cityPath = JSON.parse(info.data.city_path || 'null')
+      if (cityPath) {
+        this.checkArea = this.areaData[0].findIndex(item => item.id === cityPath[0].code)
+        setTimeout(() => {
+          this.checkCity = this.cityData.findIndex(item => item.id === cityPath[1].code)
+        }, 200)
       }
-      this.fileList.push({ name: '', url: license_url })
     },
     // 提交
     onSubmit() {
+      const area = this.getAreaMsg()
+      const city = this.getCityMsg()
+      if (!area || !city || !this.addForm.address) {
+        this.$message.warning('请选择省市输入详细地址')
+        return
+      }
+      if (!this.addForm.lng || !this.addForm.lng) {
+        this.$message.warning('请点击定位获取经纬度')
+        return
+      }
+
+      this.addForm.photo = ''
+      this.addForm.license_url = ''
+      this.photo.length && (this.addForm.photo = this.photo[0].response ? this.photo[0].response.url : this.photo[0].url)
+      this.license.length && (this.addForm.license_url = this.license[0].response ? this.license[0].response.url : this.license[0].url)
+
+      this.addForm.city = city.fullname
+      this.addForm.city_path = JSON.stringify([{
+        code: area.id, name: area.fullname, pinyin: area.pinyin
+      }, {
+        code: city.id, name: city.fullname, pinyin: city.pinyin
+      }])
+
       this.$refs.addForm.validate(valid => {
         if (valid) {
-          this.SubmitFn()
-          if (this.roles !== 'admin') {
-            // 刷新详情
-            this.getInfo()
-          }
+          const Fn = this.id ? edit : add
+          Fn({ data: this.addForm, create_type: 0 }).then(res => {
+            this.$message({
+              message: this.id ? '修改成功' : '添加成功',
+              type: 'success'
+            })
+            this.$router.push('list')
+          })
         } else {
           console.log('error submit!!')
           return false
         }
       })
     },
-    SubmitFn() {
-      const Fn = (this.id || this.roles[0] === 'company') ? update : add
-      Fn({ company: this.addForm }).then(res => {
-        this.$message({
-          message: (this.id || this.roles[0] === 'company') ? '修改成功' : '添加成功',
-          type: 'success'
-        })
-        this.fileList = []
-        this.id && this.$router.push('list')
-      })
+    // 上传成功
+    photoSuccess(response, file, fileList) {
+      this.photo = fileList
+    },
+    licenseSuccess(response, file, fileList) {
+      this.license = fileList
+    },
+    handleExceed(files, fileList) {
+      this.$message.warning(`最多上传${fileList.length}张图片，请删除后再上传！`)
+    },
+    photoRemove(file, fileList) {
+      this.photo.length = 0
+    },
+    licenseRemove(file, fileList) {
+      this.license.length = 0
     },
     // 取消
     onCancel() {
       this.$router.go(-1)
+    },
+    showMap() {
+      const area = this.getAreaMsg()
+      const city = this.getCityMsg()
+      if (!area || !city || !this.addForm.address) {
+        this.$message.warning('请选择省市输入详细地址')
+        return
+      }
+      this.dialogVisible = true
+      this.$nextTick(() => {
+        const BMap = window.BMap
+        var map = new BMap.Map('mymap')
+        map.addControl(new BMap.NavigationControl())
+        var point = new BMap.Point(city.location.lng, city.location.lat)
+        map.centerAndZoom(point, 12)
+        // 创建地址解析器实例
+        var myGeo = new BMap.Geocoder()
+        // 将地址解析结果显示在地图上,并调整地图视野
+        myGeo.getPoint(`${area.fullname}${city.fullname}${this.addForm.address}`, (point) => {
+          console.log('位置：', point)
+          if (point) {
+            this.addForm.lng = point.lng
+            this.addForm.lat = point.lat
+            map.centerAndZoom(point, 16)
+            map.addOverlay(new BMap.Marker(point))
+          } else {
+            alert('您选择地址没有解析到结果!')
+          }
+        }, city.fullname)
+      })
+    },
+    getAreaMsg() {
+      return this.checkArea !== '' ? this.areaData[0][this.checkArea] : ''
+    },
+    getCityMsg() {
+      return this.checkCity !== '' ? this.cityData[this.checkCity] : ''
     }
   }
 }
@@ -237,6 +321,15 @@ export default {
 }
 .line{
   text-align: center;
+}
+.baidu-map {
+  margin-top: 10px;
+  width: 100%;
+  height: 500px;
+}
+.map-content {
+  display: flex;
+  justify-content: space-between;
 }
 </style>
 
