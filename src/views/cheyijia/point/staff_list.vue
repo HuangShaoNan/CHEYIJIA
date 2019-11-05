@@ -31,17 +31,17 @@
       highlight-current-row
       style="margin-top:30px;"
     >
-      <el-table-column align="center" prop="id" label="ID" width="95">
+      <el-table-column align="center" prop="id" label="ID">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点ID" prop="name" align="center" width="95">
+      <el-table-column label="加注点" prop="name" align="center">
         <template slot-scope="scope">
-          {{ scope.row.point_id }}
+          {{ scope.row.point_name }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width="110" prop="company_id" align="center">
+      <el-table-column label="姓名" prop="company_id" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -51,25 +51,25 @@
           {{ scope.row.mobile }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="类型" width="110" align="center" prop="state">
+      <el-table-column class-name="status-col" label="类型" align="center" prop="state">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.state == 0" type="">管理员</el-tag>
           <el-tag v-else type="danger">员工</el-tag>
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
+      <el-table-column class-name="status-col" label="状态" align="center" prop="state">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.state == 0" type="">正常</el-tag>
           <el-tag v-else type="danger">冻结</el-tag>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="create_date" label="注册时间" width="200">
+      <el-table-column align="center" prop="create_date" label="注册时间">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.create_date | parseTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column align="center" label="操作" width="100">
+      <el-table-column align="center" label="操作">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
         </template>
