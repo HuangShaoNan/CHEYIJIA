@@ -258,6 +258,16 @@ export const asyncRoutes = [
           roles: ['admin']
         },
         component: () => import('@/views/cheyijia/point/staff_edit')
+      },
+      {
+        path: 'goodslist',
+        name: 'goodslist',
+        meta: {
+          title: '在售尿素',
+          icon: 'shopping',
+          roles: ['admin']
+        },
+        component: () => import('@/views/cheyijia/point/goods_list')
       }
     ]
   },

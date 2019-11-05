@@ -71,3 +71,12 @@ export function staffUpdate(data) {
     data
   })
 }
+
+export function goodsList(data) {
+  return request({
+    url: '/goods',
+    method: 'post',
+    data
+  })
+}
+
