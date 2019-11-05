@@ -51,9 +51,9 @@
           {{ scope.row.mobile }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="类型" align="center" prop="state">
+      <el-table-column class-name="status-col" label="类型" align="center" prop="manager">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.state == 0" type="">管理员</el-tag>
+          <el-tag v-if="scope.row.manager == 0" type="">管理员</el-tag>
           <el-tag v-else type="danger">员工</el-tag>
         </template>
       </el-table-column>

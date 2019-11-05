@@ -72,7 +72,7 @@ export default {
   methods: {
     // 获取详情信息
     async getInfo() {
-      const info = await staffInfo({ id: this.id })
+      const info = await staffInfo({ id: this.addForm.id })
       this.addForm = info.data
     },
     // 提交
@@ -82,7 +82,7 @@ export default {
           const Fn = this.addForm.id ? staffUpdate : staffAdd
           Fn({ data: this.addForm }).then(res => {
             this.$message({
-              message: this.id ? '修改成功' : '添加成功',
+              message: this.addForm.id ? '修改成功' : '添加成功',
               type: 'success'
             })
             this.$router.push('stafflist')
