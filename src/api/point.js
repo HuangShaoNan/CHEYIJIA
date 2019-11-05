@@ -39,3 +39,35 @@ export function edit(data) {
     data
   })
 }
+
+export function staff(data) {
+  return request({
+    url: '/staff',
+    method: 'post',
+    data
+  })
+}
+
+export function staffAdd(data) {
+  return request({
+    url: '/staff/add',
+    method: 'post',
+    data
+  })
+}
+
+export function staffInfo(data) {
+  return request({
+    url: '/staff/info',
+    method: 'post',
+    data
+  })
+}
+
+export function staffUpdate(data) {
+  return request({
+    url: '/staff/update',
+    method: 'post',
+    data
+  })
+}

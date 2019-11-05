@@ -228,6 +228,36 @@ export const asyncRoutes = [
           roles: ['admin']
         },
         component: () => import('@/views/cheyijia/point/add')
+      },
+      {
+        path: 'stafflist',
+        name: 'stafflist',
+        hidden: true,
+        meta: {
+          title: '加注点员工',
+          roles: ['admin']
+        },
+        component: () => import('@/views/cheyijia/point/staff_list')
+      },
+      {
+        path: 'staffadd',
+        name: 'staffadd',
+        hidden: true,
+        meta: {
+          title: '新增员工',
+          roles: ['admin']
+        },
+        component: () => import('@/views/cheyijia/point/staff_edit')
+      },
+      {
+        path: 'staffedit',
+        name: 'staffedit',
+        hidden: true,
+        meta: {
+          title: '修改员工',
+          roles: ['admin']
+        },
+        component: () => import('@/views/cheyijia/point/staff_edit')
       }
     ]
   },
