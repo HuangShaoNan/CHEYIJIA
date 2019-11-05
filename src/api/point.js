@@ -80,3 +80,11 @@ export function goodsList(data) {
   })
 }
 
+export function orderList(data) {
+  return request({
+    url: '/order',
+    method: 'post',
+    data
+  })
+}
+

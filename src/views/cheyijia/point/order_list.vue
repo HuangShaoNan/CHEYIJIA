@@ -4,7 +4,7 @@
       <el-col :span="24" class="tr">
         <el-input
           v-model="listQuery.name"
-          placeholder="请输入商品名称"
+          placeholder="请输入"
           clearable
           class="ipt-w"
         />
@@ -22,40 +22,28 @@
       highlight-current-row
       style="margin-top:30px;"
     >
-      <el-table-column label="加注点" prop="name" align="center">
+      <el-table-column label="ID" prop="id" align="center">
         <template slot-scope="scope">
-          {{ scope.row.point_name }}
+          {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="商品名称" prop="name" align="center">
+      <el-table-column label="消费金额" prop="amount" align="center">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          ¥{{ scope.row.amount }}
         </template>
       </el-table-column>
-      <el-table-column label="价格" prop="price" align="center">
+      <el-table-column label="卡类型" prop="card_type" align="center">
         <template slot-scope="scope">
-          ¥{{ scope.row.price + ' / ' + scope.row.type }}
+          <el-tag v-if="scope.row.card_type == 0">私有卡</el-tag>
+          <el-tag v-else-if="scope.row.card_type == 1">共享卡</el-tag>
+          <el-tag v-else>微信支付</el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="库存" prop="stock" align="center">
+      <el-table-column label="订单状态" prop="state" align="center">
         <template slot-scope="scope">
-          {{ scope.row.stock }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="start_time" label="有效期开始时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.start_time | parseTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="end_time" label="有效期结束时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.end_time | parseTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="状态" prop="state" align="center">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.state == 0">正常</el-tag>
-          <el-tag v-else type="danger">已下架</el-tag>
+          <el-tag v-if="scope.row.state == 0">未支付</el-tag>
+          <el-tag v-else-if="scope.row.state == 1">已支付</el-tag>
+          <el-tag v-else type="danger">已取消</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="创建时间">
@@ -70,7 +58,7 @@
 </template>
 
 <script>
-import { goodsList } from '@/api/point'
+import { orderList } from '@/api/point'
 import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -90,7 +78,7 @@ export default {
       listQuery: { // 查询列表参数
         page_index: 1,
         page_size: 20,
-        name: '',
+        type: 'all',
         point_id: 0
       }
     }
@@ -103,7 +91,7 @@ export default {
     async getList(page) {
       page === 1 && (this.listQuery.page_index = 1)
       this.listLoading = true
-      const res = await goodsList(this.listQuery)
+      const res = await orderList(this.listQuery)
       this.list = res.data.list || []
       this.total = res.data.total
       this.listLoading = false

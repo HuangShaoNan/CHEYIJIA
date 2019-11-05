@@ -268,6 +268,16 @@ export const asyncRoutes = [
           roles: ['admin']
         },
         component: () => import('@/views/cheyijia/point/goods_list')
+      },
+      {
+        path: 'orderlist',
+        name: 'orderlist',
+        meta: {
+          title: '销售订单',
+          icon: 'skill',
+          roles: ['admin']
+        },
+        component: () => import('@/views/cheyijia/point/order_list')
       }
     ]
   },
