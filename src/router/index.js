@@ -431,7 +431,7 @@ export const asyncRoutes = [
         component: () =>
           import('@/views/logistics/driverManagement/rechargeCard'),
         meta: {
-          icon: 'list',
+          icon: 'nested',
           title: '司机充值记录',
           roles: ['company']
         }

@@ -94,7 +94,7 @@ export default {
       listQuery: { // 查询列表参数
         page_index: 1,
         page_size: 20,
-        point_name: '',
+        point_name: ''
       }
     }
   },
