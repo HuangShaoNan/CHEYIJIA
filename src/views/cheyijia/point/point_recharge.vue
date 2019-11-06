@@ -1,10 +1,7 @@
 <template>
   <div class="app-container">
     <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="7">
-        <el-button type="primary" @click="handleAdd">新增加注点</el-button>
-      </el-col>
-      <el-col :span="17" class="tr">
+      <el-col :span="24" class="tr">
         <el-input
           v-model="listQuery.company_name"
           placeholder="请输入公司名称"
@@ -47,12 +44,6 @@
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点照片" prop="name" align="center">
-        <template slot-scope="scope">
-          <el-link v-if="scope.row.photo" :href="scope.row.photo" type="primary" target="_black" icon="el-icon-view">查看</el-link>
-          <span v-else>--</span>
-        </template>
-      </el-table-column>
       <el-table-column label="地址" prop="mobile" align="center">
         <template slot-scope="scope">
           {{ scope.row.address }}
@@ -79,16 +70,9 @@
           {{ scope.row.staff_mobile }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" width="110" align="center" prop="state">
-        <template slot-scope="scope">
-          <el-tag v-if="scope.row.state == 0" type="">待审核</el-tag>
-          <el-tag v-else-if="scope.row.state == 1" type="">已审核</el-tag>
-          <el-tag v-else type="danger">冻结</el-tag>
-        </template>
-      </el-table-column>
       <el-table-column label="预付款剩余" prop="advance" align="center">
         <template slot-scope="scope">
-          ¥{{ scope.row.advance }}
+          <el-tag class="f16">¥{{ scope.row.advance }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column align="center" prop="create_date" label="注册时间" width="200">
@@ -96,22 +80,34 @@
           <i class="el-icon-time" />
           <span>{{ scope.row.create_date | parseTime }}</span>
         </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作" width="180">
+      </el-table-column>/
+      <el-table-column align="center" label="操作" width="100">
         <template slot-scope="scope">
-          <el-link :href="'#/servicePoint/stafflist?id=' + scope.row.id">
-            <el-button type="primary" icon="el-icon-user-solid" size="small">员工</el-button>
-          </el-link>
-          <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
+          <el-button type="primary" icon="el-icon-edit" size="small" @click="showRecharge(scope)">充值</el-button>
         </template>
       </el-table-column>
     </el-table>
     <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" class="tr" @pagination="getList" />
+
+    <el-dialog
+      title="预付款充值"
+      :visible.sync="dialogVisible"
+      width="50%"
+    >
+      <div class="f16">
+        <div class="flex"><span>账户名：</span><div>{{ point.card_name }}</div></div>
+        <div class="flex"><span>账户卡号：</span><div>{{ point.card_num }}</div></div>
+        <div class="flex"><span>充值金额：</span><div><el-input v-model="amount" type="number" placeholder="请输入金额" clearable /></div></div>
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <span class="msg">点击充值后金额将直接充入加注点，请确认实际转账到账后再充值</span><el-button type="primary" @click="recharge">确 定</el-button>
+      </span>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { list } from '@/api/point'
+import { list, rechargeAdd } from '@/api/point'
 import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -129,12 +125,16 @@ export default {
       total: 0,
       listLoading: true,
       listQuery: { // 查询列表参数
+        state: 1,
         page_index: 1,
         page_size: 20,
         company_name: '',
         name: '',
         city: ''
-      }
+      },
+      dialogVisible: false,
+      point: {},
+      amount: ''
     }
   },
   created() {
@@ -150,13 +150,38 @@ export default {
       this.total = res.data.total
       this.listLoading = false
     },
-    // 新增
-    handleAdd() {
-      this.$router.push({ path: '/servicePoint/add' })
+    showRecharge(scope) {
+      this.point = scope.row
+      this.dialogVisible = true
     },
-    // 修改
-    handleEdit(scope) {
-      this.$router.push({ path: '/servicePoint/edit', query: { id: scope.row.id }})
+    recharge(scope) {
+      if (!this.point.card_num || !this.point.card_name) {
+        this.$message({
+          message: '请先设置加注点账户名及卡号！',
+          type: 'warning'
+        })
+        return
+      }
+      this.point.amount = ~~this.amount
+      if (this.point.amount <= 0) {
+        this.$message({
+          message: '请输入正确的金额！',
+          type: 'warning'
+        })
+        return
+      }
+
+      rechargeAdd({ recharge: this.point }).then(res => {
+        if (res.code === 20000) {
+          this.$message({
+            message: '充值完成！',
+            type: 'success'
+          })
+          this.getList()
+          this.dialogVisible = false
+          this.amount = ''
+        }
+      })
     }
   }
 }
@@ -164,5 +189,20 @@ export default {
 <style lang="scss" scoped>
 .ipt-w {
   width: 200px;
+}
+.flex {
+  display: flex;
+  align-items: center;
+  margin-bottom: 30px;
+}
+.flex span {
+  display: block;
+  width: 150px;
+  text-align: right;
+}
+.msg {
+  font-size: 12px;
+  color: red;
+  margin-right: 30px;
 }
 </style>

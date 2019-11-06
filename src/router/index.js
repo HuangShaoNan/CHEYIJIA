@@ -281,6 +281,40 @@ export const asyncRoutes = [
       }
     ]
   },
+  {
+    // 车易加路由模块 - 加注点预付款
+    path: '/pointRecharge',
+    component: Layout,
+    name: 'pointRecharge',
+    redirect: '/pointRecharge/list',
+    meta: {
+      title: '加注点预付款',
+      icon: 'money',
+      roles: ['admin']
+    },
+    children: [
+      {
+        path: 'pointlist',
+        name: 'pointlist_r',
+        component: () => import('@/views/cheyijia/point/point_recharge'),
+        meta: {
+          icon: 'list',
+          title: '预付款充值',
+          roles: ['admin']
+        }
+      },
+      {
+        path: 'rechargelist',
+        name: 'pointrechargelist',
+        component: () => import('@/views/cheyijia/point/recharge_list'),
+        meta: {
+          icon: 'list',
+          title: '充值历史',
+          roles: ['admin']
+        }
+      }
+    ]
+  },
   // {
   //   // 车易加路由模块 -结算管理
   //   path: '/settlement',

@@ -88,3 +88,19 @@ export function orderList(data) {
   })
 }
 
+export function rechargeAdd(data) {
+  return request({
+    url: '/recharge_point/add',
+    method: 'post',
+    data
+  })
+}
+
+export function rechargeList(data) {
+  return request({
+    url: '/recharge_point',
+    method: 'post',
+    data
+  })
+}
+

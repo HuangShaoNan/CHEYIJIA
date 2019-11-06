@@ -1,19 +1,10 @@
 <template>
   <div class="app-container">
     <el-row type="flex" class="row-bg" justify="space-around">
-      <el-col :span="7">
-        <el-button type="primary" @click="handleAdd">新增员工</el-button>
-      </el-col>
-      <el-col :span="17" class="tr">
+      <el-col :span="24" class="tr">
         <el-input
-          v-model="listQuery.name"
-          placeholder="请输入员工姓名"
-          clearable
-          class="ipt-w"
-        />
-        <el-input
-          v-model="listQuery.mobile"
-          placeholder="请输入员工手机"
+          v-model="listQuery.point_name"
+          placeholder="请输入加注点名称"
           clearable
           class="ipt-w"
         />
@@ -31,47 +22,50 @@
       highlight-current-row
       style="margin-top:30px;"
     >
-      <el-table-column align="center" prop="id" label="ID">
+      <el-table-column align="center" prop="id" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点" prop="name" align="center">
+      <el-table-column label="加注点名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.point_name }}
         </template>
       </el-table-column>
-      <el-table-column label="姓名" prop="company_id" align="center">
+      <el-table-column label="账户名" prop="card_name" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.card_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="卡号" prop="card_num" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.card_num }}
+        </template>
+      </el-table-column>
+      <el-table-column label="充值用户" width="110" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="手机号" prop="mobile" align="center">
+      <el-table-column label="充值金额" prop="amount" align="center">
         <template slot-scope="scope">
-          {{ scope.row.mobile }}
+          ¥{{ scope.row.amount }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="类型" align="center" prop="manager">
+      <el-table-column label="充值前金额" prop="before_amount" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.manager == 0" type="">管理员</el-tag>
-          <el-tag v-else type="danger">员工</el-tag>
+          ¥{{ scope.row.before_amount }}
         </template>
       </el-table-column>
-      <el-table-column class-name="status-col" label="状态" align="center" prop="state">
+      <el-table-column label="充值后金额" prop="after_amount" align="center">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.state == 0" type="">正常</el-tag>
-          <el-tag v-else type="danger">冻结</el-tag>
+          ¥{{ scope.row.after_amount }}
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="create_date" label="注册时间">
+      <el-table-column align="center" prop="create_date" label="充值时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />
           <span>{{ scope.row.create_date | parseTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="操作">
-        <template slot-scope="scope">
-          <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,7 +74,7 @@
 </template>
 
 <script>
-import { staff } from '@/api/point'
+import { rechargeList } from '@/api/point'
 import { parseTime } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 export default {
@@ -100,15 +94,11 @@ export default {
       listQuery: { // 查询列表参数
         page_index: 1,
         page_size: 20,
-        name: '',
-        mobile: '',
-        point_id: 0
+        point_name: '',
       }
     }
   },
   created() {
-    this.listQuery.point_id = this.$route.query.id || 0
-
     this.getList()
   },
   methods: {
@@ -116,18 +106,10 @@ export default {
     async getList(page) {
       page === 1 && (this.listQuery.page_index = 1)
       this.listLoading = true
-      const res = await staff(this.listQuery)
+      const res = await rechargeList(this.listQuery)
       this.list = res.data.list || []
       this.total = res.data.total
       this.listLoading = false
-    },
-    // 新增
-    handleAdd() {
-      this.$router.push({ path: 'staffadd', query: { point_id: this.listQuery.point_id }})
-    },
-    // 修改
-    handleEdit(scope) {
-      this.$router.push({ path: 'staffedit', query: { id: scope.row.id }})
     }
   }
 }
