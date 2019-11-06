@@ -359,7 +359,7 @@ export const asyncRoutes = [
     component: Layout,
     meta: {
       title: '充值管理',
-      icon: 'example',
+      icon: 'money',
       roles: ['company']
     },
     children: [
@@ -369,7 +369,7 @@ export const asyncRoutes = [
         component: () => import('@/views/logistics/recharge/list'),
         meta: {
           title: '充值记录',
-          icon: 'example',
+          icon: 'list',
           roles: ['company']
         }
       },
@@ -379,7 +379,7 @@ export const asyncRoutes = [
         component: () => import('@/views/logistics/recharge/add'),
         meta: {
           title: '账户充值',
-          icon: 'example',
+          icon: 'money',
           roles: ['company']
         }
       }
@@ -392,7 +392,7 @@ export const asyncRoutes = [
     meta: {
       roles: ['company'],
       title: '司机管理',
-      icon: 'example'
+      icon: 'tree-table'
     },
     children: [
       {
@@ -401,7 +401,7 @@ export const asyncRoutes = [
         component: () => import('@/views/logistics/driverManagement/list'),
         meta: {
           title: '司机列表',
-          icon: 'example',
+          icon: 'list',
           roles: ['company']
         }
       },
@@ -412,7 +412,7 @@ export const asyncRoutes = [
         meta: {
           roles: ['company'],
           title: '新增司机',
-          icon: 'example'
+          icon: 'user'
         }
       },
       {
@@ -431,32 +431,32 @@ export const asyncRoutes = [
         component: () =>
           import('@/views/logistics/driverManagement/rechargeCard'),
         meta: {
-          icon: 'example',
+          icon: 'list',
           title: '司机充值记录',
           roles: ['company']
         }
       }
     ]
   },
-  // {
-  // 	// 物流公司路由模块 - 司机消费记录
-  // 	path: '/expensesRecord',
-  // 	component: Layout,
-  // 	meta: {
-  // 		roles: ['company']
-  // 	},
-  // 	children: [{
-  // 			path: 'list',
-  // 			name: 'erList',
-  // 			component: () => import('@/views/logistics/expensesRecord/list'),
-  // 			meta: {
-  // 				title: '司机消费记录',
-  // 				icon: 'example',
-  // 				roles: ['company']
-  // 			}
-  // 		}
-  // 	]
-  // },
+  {
+    // 物流公司路由模块 - 司机消费记录
+    path: '/expensesRecord',
+    component: Layout,
+    meta: {
+      roles: ['company']
+    },
+    children: [{
+      path: 'list',
+      name: 'erList',
+      component: () => import('@/views/logistics/expensesRecord/list'),
+      meta: {
+        title: '司机消费记录',
+        icon: 'shopping',
+        roles: ['company']
+      }
+    }
+    ]
+  },
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

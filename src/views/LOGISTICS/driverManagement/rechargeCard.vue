@@ -1,10 +1,15 @@
 <!-- 充值卡记录 -->
 <template>
   <div class="app-container">
-    <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <el-row type="flex" class="row-bg" justify="space-around">
+      <el-col :span="24" class="tr">
+        <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+        <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+          搜索
+        </el-button>
+      </el-col>
+    </el-row>
+
     <el-table
       v-loading="listLoading"
       :data="list"
