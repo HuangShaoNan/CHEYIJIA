@@ -292,15 +292,27 @@ export default {
         myGeo.getPoint(`${area.fullname}${city.fullname}${this.addForm.address}`, (point) => {
           console.log('位置：', point)
           if (point) {
-            this.addForm.lng = point.lng
-            this.addForm.lat = point.lat
             map.centerAndZoom(point, 16)
             map.addOverlay(new BMap.Marker(point))
+            const p = this.bd_decrypt(point.lng, point.lat)
+            this.addForm.lng = p.lng
+            this.addForm.lat = p.lat
           } else {
             alert('您选择地址没有解析到结果!')
           }
         }, city.fullname)
       })
+    },
+    // 百度经纬度转高德经纬度
+    bd_decrypt(bd_lng, bd_lat) {
+      var X_PI = Math.PI * 3000.0 / 180.0;
+      var x = bd_lng - 0.0065;
+      var y = bd_lat - 0.006;
+      var z = Math.sqrt(x * x + y * y) - 0.00002 * Math.sin(y * X_PI);
+      var theta = Math.atan2(y, x) - 0.000003 * Math.cos(x * X_PI);
+      var gg_lng = z * Math.cos(theta);
+      var gg_lat = z * Math.sin(theta);
+      return {lng: gg_lng, lat: gg_lat}
     },
     getAreaMsg() {
       return this.checkArea !== '' ? this.areaData[0][this.checkArea] : ''
