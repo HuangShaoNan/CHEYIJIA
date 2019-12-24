@@ -88,7 +88,7 @@
       <el-table-column label="操作" width="200">
         <template slot-scope="scope">
           <el-button type="primary" icon="el-icon-edit" size="small" @click="handleEdit(scope)">修改</el-button>
-          <el-button v-if="scope.row.state != 0 || scope.row.card_type != 0" type="primary" icon="el-icon-edit" size="small" @click="handleRecharge(scope)">充值</el-button>
+          <el-button v-if="scope.row.state == 0 && scope.row.card_type == 0" type="primary" icon="el-icon-edit" size="small" @click="handleRecharge(scope)">充值</el-button>
         </template>
       </el-table-column>
     </el-table>

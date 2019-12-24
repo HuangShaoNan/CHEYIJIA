@@ -56,9 +56,9 @@
           {{ DriverType(scope.row.type) }}
         </template>
       </el-table-column>
-      <el-table-column label="卡片类型" width="110" align="center" prop="card_id">
+      <el-table-column label="卡片类型" width="110" align="center" prop="card_type">
         <template slot-scope="scope">
-          {{ cardType(scope.row.card_id || 2) }}
+          {{ cardType(scope.row.card_type || 2) }}
         </template>
       </el-table-column>
       <el-table-column class-name="status-col" label="卡片状态" width="110" align="center" prop="state">

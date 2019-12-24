@@ -45,6 +45,7 @@
       <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;" @click.native.prevent="handleLogin">登录</el-button>
 
     </el-form>
+    <div class="bottom-bar">沪ICP备19033539号-1</div>
   </div>
 </template>
 
@@ -172,6 +173,16 @@ $cursor: #fff;
 </style>
 
 <style lang="scss" scoped>
+.bottom-bar {
+  text-align: center;
+  color:#fff;
+  line-height: 50px;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  font-size: 12px;
+}
 $bg:#2d3a4b;
 $dark_gray:#889aa4;
 $light_gray:#eee;
