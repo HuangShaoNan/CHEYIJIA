@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-row type="flex" class="row-bg" justify="space-around">
+    <el-row v-if="false" type="flex" class="row-bg" justify="space-around">
       <el-col :span="24" class="tr">
         <el-input
           v-model="listQuery.name"
@@ -25,6 +25,11 @@
       <el-table-column label="ID" prop="id" align="center">
         <template slot-scope="scope">
           {{ scope.row.id }}
+        </template>
+      </el-table-column>
+      <el-table-column label="加注点" prop="name" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.name }}
         </template>
       </el-table-column>
       <el-table-column label="消费金额" prop="amount" align="center">

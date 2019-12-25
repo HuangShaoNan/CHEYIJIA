@@ -145,7 +145,6 @@ export default {
     // 如果id存在是编辑模块
     if (this.id) {
       this.getInfo()
-      this.QueryDriverCard()
     }
   },
   methods: {
@@ -175,6 +174,7 @@ export default {
         id,
         card_type: ''
       }
+      this.QueryDriverCard()
     },
     // 提交
     onSubmit() {
@@ -201,6 +201,9 @@ export default {
       const res = await QueryDriverCard({ driver_mobile: this.driver_mobile })
       this.addForm.card_type = res.data.type
       this.addForm.state = res.data.state
+      if (this.addForm.type === 1) {
+        this.cardTypeList[1].disabled = true
+      }
     },
     // 取消
     onCancel() {
