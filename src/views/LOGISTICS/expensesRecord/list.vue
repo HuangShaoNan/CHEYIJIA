@@ -1,12 +1,14 @@
 <!-- 司机消费记录 -->
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAdd">新增司机</el-button>
-    <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-    <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
-    <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
-      搜索
-    </el-button>
+    <div class="tr">
+      <el-input v-model="listQuery.name" placeholder="请输入姓名" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-input v-model="listQuery.mobile" placeholder="请输入手机号" style="width: 200px;" class="filter-item" @keyup.enter.native="handleFilter" />
+      <el-button class="filter-item" type="primary" icon="el-icon-search" @click="handleFilter">
+        搜索
+      </el-button>
+    </div>
+
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -24,6 +26,16 @@
       <el-table-column label="加注点" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="司机姓名" prop="driver_name" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.driver_name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="司机手机" prop="driver_mobile" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.driver_mobile }}
         </template>
       </el-table-column>
       <el-table-column label="消费金额" width="110" align="center" prop="available_amount">
