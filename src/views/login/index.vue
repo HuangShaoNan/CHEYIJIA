@@ -42,7 +42,7 @@
         </span>
       </el-form-item>
 
-      <el-button :loading="loading" type="primary" style="width:100%; margin-top:30px;" @click.native.prevent="handleLogin">登录</el-button>
+      <el-button :loading="loading" type="primary" style="width:100%; margin-top:10px;" @click.native.prevent="handleLogin">登录</el-button>
 
     </el-form>
     <div class="bottom-bar"><a target="_black" href="http://www.beian.miit.gov.cn">沪ICP备19033539号-1</a></div>
