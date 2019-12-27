@@ -14,7 +14,7 @@
       <el-form-item ref="recharge_img" label="上传转账截图" prop="recharge_img">
         <el-upload
           class="upload-demo"
-          action="api/uploads?type=img"
+          action="/api/uploads?type=img"
           :before-remove="beforeRemove"
           :on-success="handleSuccess"
           list-type="picture"
