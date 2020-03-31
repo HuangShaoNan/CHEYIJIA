@@ -1,4 +1,4 @@
-<!-- 加注点 -->
+<!-- 加油站 -->
 <template>
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">

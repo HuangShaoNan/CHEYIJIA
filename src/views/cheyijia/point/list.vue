@@ -2,7 +2,7 @@
   <div class="app-container">
     <el-row type="flex" class="row-bg" justify="space-around">
       <el-col :span="7">
-        <el-button type="primary" @click="handleAdd">新增加注点</el-button>
+        <el-button type="primary" @click="handleAdd">新增加油站</el-button>
       </el-col>
       <el-col :span="17" class="tr">
         <el-input
@@ -13,7 +13,7 @@
         />
         <el-input
           v-model="listQuery.name"
-          placeholder="请输入加注点名称"
+          placeholder="请输入加油站名称"
           clearable
           class="ipt-w"
         />
@@ -42,12 +42,12 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点名称" prop="name" align="center">
+      <el-table-column label="加油站名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点照片" prop="name" align="center">
+      <el-table-column label="加油站照片" prop="name" align="center">
         <template slot-scope="scope">
           <el-link v-if="scope.row.photo" :href="scope.row.photo" type="primary" target="_black" icon="el-icon-view">查看</el-link>
           <span v-else>--</span>

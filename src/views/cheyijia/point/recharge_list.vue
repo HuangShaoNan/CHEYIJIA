@@ -4,7 +4,7 @@
       <el-col :span="24" class="tr">
         <el-input
           v-model="listQuery.point_name"
-          placeholder="请输入加注点名称"
+          placeholder="请输入加油站名称"
           clearable
           class="ipt-w"
         />
@@ -27,7 +27,7 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点名称" prop="name" align="center">
+      <el-table-column label="加油站名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.point_name }}
         </template>

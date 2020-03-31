@@ -1,4 +1,4 @@
-<!-- 加注点 -->
+
 <template>
   <div class="app-container">
     <el-form ref="addForm" :model="addForm" :rules="addRules" label-width="120px">
@@ -27,7 +27,7 @@
         <el-input v-model="addForm.address" class="ipt-address" />&nbsp; <el-link type="primary" icon="el-icon-map-location" @click="showMap">定位获取经纬度</el-link>
         <div>经度：{{ addForm.lng || '--' }} &nbsp; 纬度：{{ addForm.lat || '--' }}</div>
       </el-form-item>
-      <el-form-item label="加注点照片">
+      <el-form-item label="照片">
         <el-upload
           class="upload-demo"
           action="/api/uploads?type=img"
@@ -88,7 +88,7 @@
     </el-form>
 
     <el-dialog
-      title="加注点定位"
+      title="定位"
       :visible.sync="dialogVisible"
       width="80%"
     >

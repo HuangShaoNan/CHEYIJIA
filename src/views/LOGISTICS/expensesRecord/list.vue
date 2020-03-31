@@ -23,7 +23,7 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点" prop="name" align="center">
+      <el-table-column label="加油站" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>

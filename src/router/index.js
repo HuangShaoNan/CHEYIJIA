@@ -188,13 +188,13 @@ export const asyncRoutes = [
     ]
   },
   {
-    // 车易加路由模块 - 加注点管理
+    // 车易加路由模块 - 加油站管理
     path: '/servicePoint',
     component: Layout,
     name: 'servicePoint',
     redirect: '/servicePoint/list',
     meta: {
-      title: '加注点管理',
+      title: '加油站管理',
       icon: 'guide',
       roles: ['admin']
     },
@@ -205,7 +205,7 @@ export const asyncRoutes = [
         component: () => import('@/views/cheyijia/point/list'),
         meta: {
           icon: 'list',
-          title: '加注点列表',
+          title: '加油站列表',
           roles: ['admin']
         }
       },
@@ -215,7 +215,7 @@ export const asyncRoutes = [
         component: () => import('@/views/cheyijia/point/add'),
         meta: {
           icon: 'form',
-          title: '新增加注点',
+          title: '新增加油站',
           roles: ['admin']
         }
       },
@@ -224,7 +224,7 @@ export const asyncRoutes = [
         name: 'editPoint',
         hidden: true,
         meta: {
-          title: '编辑加注点',
+          title: '编辑加油站',
           roles: ['admin']
         },
         component: () => import('@/views/cheyijia/point/add')
@@ -234,7 +234,7 @@ export const asyncRoutes = [
         name: 'stafflist',
         hidden: true,
         meta: {
-          title: '加注点员工',
+          title: '加油站员工',
           roles: ['admin']
         },
         component: () => import('@/views/cheyijia/point/staff_list')
@@ -263,7 +263,7 @@ export const asyncRoutes = [
         path: 'goodslist',
         name: 'goodslist',
         meta: {
-          title: '在售尿素',
+          title: '在售商品',
           icon: 'shopping',
           roles: ['admin']
         },
@@ -282,13 +282,13 @@ export const asyncRoutes = [
     ]
   },
   {
-    // 车易加路由模块 - 加注点预付款
+    // 车易加路由模块 - 加油站预付款
     path: '/pointRecharge',
     component: Layout,
     name: 'pointRecharge',
     redirect: '/pointRecharge/list',
     meta: {
-      title: '加注点预付款',
+      title: '加油站预付款',
       icon: 'money',
       roles: ['admin']
     },

@@ -10,7 +10,7 @@
         />
         <el-input
           v-model="listQuery.name"
-          placeholder="请输入加注点名称"
+          placeholder="请输入加油站名称"
           clearable
           class="ipt-w"
         />
@@ -39,7 +39,7 @@
           {{ scope.row.id }}
         </template>
       </el-table-column>
-      <el-table-column label="加注点名称" prop="name" align="center">
+      <el-table-column label="加油站名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
         </template>
@@ -100,7 +100,7 @@
         <div class="flex"><span>充值金额：</span><div><el-input v-model="amount" type="number" placeholder="请输入金额" clearable /></div></div>
       </div>
       <span slot="footer" class="dialog-footer">
-        <span class="msg">点击充值后金额将直接充入加注点，请确认实际转账到账后再充值</span><el-button type="primary" @click="recharge">确 定</el-button>
+        <span class="msg">点击充值后金额将直接充入加油站，请确认实际转账到账后再充值</span><el-button type="primary" @click="recharge">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -157,7 +157,7 @@ export default {
     recharge(scope) {
       if (!this.point.card_num || !this.point.card_name) {
         this.$message({
-          message: '请先设置加注点账户名及卡号！',
+          message: '请先设置加油站账户名及卡号！',
           type: 'warning'
         })
         return

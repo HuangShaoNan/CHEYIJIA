@@ -22,7 +22,7 @@
       highlight-current-row
       style="margin-top:30px;"
     >
-      <el-table-column label="加注点" prop="name" align="center">
+      <el-table-column label="加油站名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.point_name }}
         </template>
@@ -30,6 +30,11 @@
       <el-table-column label="商品名称" prop="name" align="center">
         <template slot-scope="scope">
           {{ scope.row.name }}
+        </template>
+      </el-table-column>
+      <el-table-column label="分类" prop="name" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.category }}
         </template>
       </el-table-column>
       <el-table-column label="价格" prop="price" align="center">
