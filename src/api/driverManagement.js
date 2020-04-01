@@ -53,6 +53,14 @@ export function rechargeCard(data) {
     data
   })
 }
+// 加注卡充值记录
+export function rechargeExport(data) {
+  return request({
+    url: '/recharge_card/export',
+    method: 'post',
+    data
+  })
+}
 
 // 查询卡片类型
 export function QueryDriverCard(data) {

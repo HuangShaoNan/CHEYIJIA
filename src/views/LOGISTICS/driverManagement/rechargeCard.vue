@@ -11,6 +11,7 @@
     </el-row>
 
     <el-table
+      ref="multipleTable"
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
@@ -19,6 +20,10 @@
       highlight-current-row
       style="margin-top:30px;"
     >
+      <el-table-column
+        type="selection"
+        width="55"
+      />
       <el-table-column align="center" prop="id" label="ID" width="95">
         <template slot-scope="scope">
           {{ scope.row.id }}
@@ -46,13 +51,16 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" class="tr" @pagination="rechargeCard" />
+    <div>
+      <el-button style="float: left; margin-top: 30px" type="primary" icon="el-icon-document" @click="exportExc">导出Excel</el-button>
+      <pagination v-show="total>0" :total="total" :page-sizes="[20, 50, 100, 200]" :page.sync="listQuery.page_index" :limit.sync="listQuery.page_size" class="tr" @pagination="rechargeCard" />
+    </div>
   </div>
 </template>
 
 <script>
-import { rechargeCard } from '@/api/driverManagement'
-import { parseTime } from '@/utils/index'
+import { rechargeCard, rechargeExport } from '@/api/driverManagement'
+import { parseTime, toast } from '@/utils/index'
 import Pagination from '@/components/Pagination' // secondary package based on el-pagination
 
 export default {
@@ -71,7 +79,7 @@ export default {
       listLoading: true,
       listQuery: { // 查询列表参数
         page_index: 1,
-        page_size: 10,
+        page_size: 20,
         mobile: ''
       }
     }
@@ -82,6 +90,26 @@ export default {
     this.rechargeCard()
   },
   methods: {
+    async exportExc() {
+      let selIds = this.$refs.multipleTable.selection
+      if (selIds.length === 0) {
+        toast('请勾选要导出的行')
+        return
+      }
+      selIds = selIds.map(i => i.id)
+      const loading = this.$loading({
+        lock: true,
+        text: '正在导出数据。。。',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      const res = await rechargeExport({ ids: selIds.join(',') })
+
+      setTimeout(() => {
+        location.href = res.url
+        loading.close()
+      }, 4000)
+    },
     // 获取充值记录表
     async rechargeCard() {
       this.listLoading = true

@@ -1,3 +1,6 @@
+
+import { Message } from 'element-ui'
+
 /**
  * Created by PanJiaChen on 16/11/18.
  */
@@ -46,6 +49,13 @@ export function parseTime(time, cFormat) {
   return time_str
 }
 
+export function toast(msg, type) {
+  Message({
+    message: msg,
+    type: type || 'warning',
+    duration: 2000
+  })
+}
 /**
  * @param {number} time
  * @param {string} option
