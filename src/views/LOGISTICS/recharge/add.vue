@@ -81,6 +81,7 @@ export default {
       headers: {
         'X-token': getToken()
       },
+      isAdd: false,
       addRules: { // 信息规则验证
         card_name: [{ required: true, trigger: 'blur', validator: validateCardName }],
         card_num: [{ required: true, trigger: 'blur', validator: validateCardNum }],
@@ -90,11 +91,6 @@ export default {
       id: '',
       fileList: []
     }
-  },
-  computed: {
-  },
-  created() {
-
   },
   methods: {
     handleExceed(files, fileList) {
@@ -110,14 +106,17 @@ export default {
     },
     // 提交
     onSubmit() {
+      if (this.isAdd) return
       this.$refs.addForm.validate(valid => {
         if (valid) {
+          this.isAdd = true
           rechargeAdd({ recharge: this.addForm }).then(() => {
+            this.isAdd = false
             this.$message({
               message: '提交成功',
               type: 'success'
             })
-            this.$router.push({ path: '/recharge/list' })
+            this.$router.push({ path: 'list' })
           })
         } else {
           console.log('error submit!!')

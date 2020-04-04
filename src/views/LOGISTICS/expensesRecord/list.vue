@@ -53,6 +53,11 @@
           {{ cardType(scope.row.card_type) }}
         </template>
       </el-table-column>
+      <el-table-column label="车牌号" prop="driver_mobile" align="center">
+        <template slot-scope="scope">
+          {{ scope.row.car_number }}
+        </template>
+      </el-table-column>
       <el-table-column align="center" prop="create_date" label="消费时间" width="200">
         <template slot-scope="scope">
           <i class="el-icon-time" />

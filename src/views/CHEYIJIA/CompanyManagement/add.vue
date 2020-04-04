@@ -5,6 +5,31 @@
       <el-form-item v-if="isCompany" label="企业余额">
         <div class="amount-num">￥{{ available_amount }}</div>
       </el-form-item>
+      <el-form-item v-show="roles=='admin' && !id" label="是否子公司">
+        <el-switch
+          v-model="child"
+          :active-value="1"
+          :inactive-value="0"
+        />
+      </el-form-item>
+      <el-form-item v-show="child === 1" label="选择母公司">
+        <el-select
+          v-model="parentCom"
+          filterable
+          remote
+          reserve-keyword
+          placeholder="请输入公司名称搜索"
+          :remote-method="getList"
+          :loading="loading"
+        >
+          <el-option
+            v-for="item in list"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item ref="name" label="名称" prop="name">
         <el-input v-model="addForm.name" :disabled="isCompany" />
       </el-form-item>
@@ -50,8 +75,9 @@
 </template>
 
 <script>
-import { add, detail, update } from '@/api/CompanyManagement'
+import { add, detail, update, getList } from '@/api/CompanyManagement'
 import { getToken } from '@/utils/auth'
+import { toast } from '@/utils/index'
 import { mapGetters } from 'vuex'
 
 export default {
@@ -73,6 +99,7 @@ export default {
       }
     }
     return {
+      child: 0,
       addForm: {
         name: '',
         address: '',
@@ -91,13 +118,19 @@ export default {
       id: '',
       fileList: [],
       isCompany: false,
-      available_amount: 0
+      available_amount: 0,
+      listQuery: { // 查询列表参数
+        page_index: 1,
+        page_size: 10,
+        name: '' // 公司名称
+      },
+      loading: false,
+      parentCom: '',
+      list: []
     }
   },
   created() {
     this.id = this.$route.query.id || ''
-    console.log(this.roles)
-
     this.isCompany = this.roles[0] === 'company'
 
     // 如果id存在是编辑模块 或者是物流公司补充基本资料
@@ -112,6 +145,13 @@ export default {
     ])
   },
   methods: {
+    async getList(e) {
+      this.listQuery.name = e
+      this.loading = true
+      const res = await getList(this.listQuery)
+      this.list = res.data.list || []
+      this.loading = false
+    },
     handleExceed(files, fileList) {
       this.$message.warning(`最多上传${fileList.length}张图片，请删除后再上传！`)
     },
@@ -138,7 +178,7 @@ export default {
       this.$refs.addForm.validate(valid => {
         if (valid) {
           this.SubmitFn()
-          if (this.roles !== 'admin') {
+          if (this.roles[0] !== 'admin') {
             // 刷新详情
             this.getInfo()
           }
@@ -150,13 +190,21 @@ export default {
     },
     SubmitFn() {
       const Fn = (this.id || this.roles[0] === 'company') ? update : add
-      Fn({ company: this.addForm }).then(res => {
+      let parent = ''
+      if (this.child === 1 && !this.id) {
+        if (!this.parentCom) {
+          toast('请选择母公司！')
+          return
+        }
+        parent = this.parentCom
+      }
+      Fn({ company: this.addForm, parent }).then(res => {
         this.$message({
           message: (this.id || this.roles[0] === 'company') ? '修改成功' : '添加成功',
           type: 'success'
         })
         this.fileList = []
-        this.id && this.$router.push('list')
+        this.roles[0] === 'admin' && this.$router.push('list')
       })
     },
     // 取消
