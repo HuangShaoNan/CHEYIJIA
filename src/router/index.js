@@ -386,6 +386,38 @@ export const asyncRoutes = [
     ]
   },
   {
+    // 物流公司路由模块 - 分公司转账
+    path: '/transfer',
+    component: Layout,
+    meta: {
+      title: '转账管理',
+      icon: 'money',
+      roles: ['company']
+    },
+    children: [
+      {
+        path: 'list',
+        name: 'transferList',
+        component: () => import('@/views/logistics/transfer/list'),
+        meta: {
+          title: '转账记录',
+          icon: 'list',
+          roles: ['company']
+        }
+      },
+      {
+        path: 'add',
+        name: 'transferAdd',
+        component: () => import('@/views/logistics/transfer/add'),
+        meta: {
+          title: '公司转账',
+          icon: 'money',
+          roles: ['company']
+        }
+      }
+    ]
+  },
+  {
     // 物流公司路由模块 - 司机管理
     path: '/driverManagement',
     component: Layout,

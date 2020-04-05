@@ -5,14 +5,14 @@
       <el-form-item v-if="isCompany" label="企业余额">
         <div class="amount-num">￥{{ available_amount }}</div>
       </el-form-item>
-      <el-form-item v-show="roles=='admin' && !id" label="是否子公司">
+      <el-form-item v-show="roles=='admin' && !id" label="是否分公司">
         <el-switch
           v-model="child"
           :active-value="1"
           :inactive-value="0"
         />
       </el-form-item>
-      <el-form-item v-show="child === 1" label="选择母公司">
+      <el-form-item v-show="child === 1" label="选择总公司">
         <el-select
           v-model="parentCom"
           filterable
@@ -193,7 +193,7 @@ export default {
       let parent = ''
       if (this.child === 1 && !this.id) {
         if (!this.parentCom) {
-          toast('请选择母公司！')
+          toast('请选择总公司！')
           return
         }
         parent = this.parentCom
