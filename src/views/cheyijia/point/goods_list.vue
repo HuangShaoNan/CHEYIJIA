@@ -42,21 +42,6 @@
           ¥{{ scope.row.price + ' / ' + scope.row.type }}
         </template>
       </el-table-column>
-      <el-table-column label="库存" prop="stock" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.stock }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="start_time" label="有效期开始时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.start_time | parseTime }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column align="center" prop="end_time" label="有效期结束时间">
-        <template slot-scope="scope">
-          <span>{{ scope.row.end_time | parseTime }}</span>
-        </template>
-      </el-table-column>
       <el-table-column label="状态" prop="state" align="center">
         <template slot-scope="scope">
           <el-tag v-if="scope.row.state == 0">正常</el-tag>
